@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link  rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body>
+<h3>Search and Replace.</h3>
+Perform a search and replace on the sentence using the arguments provided and return the new sentence.
+<br/>
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+
+function myReplace(str, before, after) {
+
+ /* use...
+   Array.splice()
+   String.replace()
+   Array.join()
+   NOTE: Preserve the case of the original word when you are replacing it.
+ */
+String.prototype.replaceAt=function(index, char) {return this.substr(0, index) + char + this.substr(index+char.length);}
+
+  var returnArr = [];
+  strArr = str.split(" ");
+  
+  for (i = 0; i < strArr.length; i ++) {
+  		if (strArr[i] === before) {
+  			// test case of the first char
+  			var patt = /[A-Z]/;
+  			if (patt.test(strArr[i])) {
+  				
+  			  	after = after.replaceAt(0, after.charAt(0).toUpperCase());
+  			}
+
+  				
+			returnArr.push(after);
+		} else {
+			returnArr.push(strArr[i]);		
+		}
+  }
+  
+  
+ // strArr.splice(1,0,before, after);
+
+
+  
+  
+  // Only change code above this line
+  return JSON.stringify(returnArr.join(" "));
+}
+
+function replaceStr(testStr, changeTo) {
+	if (testStr == changeTo) {
+		return after;
+	} else {
+		return testStr;		
+	}
+}
+
+
+document.getElementById("demo").innerHTML = myReplace("Let us go to the store", "store", "mall");
+	 // should return "Let us go to the mall".
+
+document.getElementById("demo2").innerHTML = myReplace("He is Sleeping on the couch", "Sleeping", "sitting");
+	 // should return "He is Sitting on the couch".
+
+document.getElementById("demo3").innerHTML = myReplace("This has a spellngi error", "spellngi", "spelling"); 
+	//should return "This has a spelling error".
+
+document.getElementById("demo4").innerHTML = myReplace("Let us get back to more Coding", "Coding", "algorithms"); 
+	// should return "Let us get back to more Algorithms".
+ 
+</script>
+<pre class="prettyprint linenums" style="background: #E8E8E8">
+function myReplace(str, before, after) {
+ /* use...
+   Array.splice()
+   String.replace()
+   Array.join()
+   NOTE: Preserve the case of the original word when you are replacing it.
+ */
+String.prototype.replaceAt=function(index, char) {return this.substr(0, index) + char + this.substr(index+char.length);}
+
+  var returnArr = [];
+  strArr = str.split(" ");
+  
+  for (i = 0; i < strArr.length; i ++) {
+  		if (strArr[i] === before) {
+  			// test case of the first char
+  			var patt = /[A-Z]/;
+  			if (patt.test(strArr[i])) {  				
+  			  	after = after.replaceAt(0, after.charAt(0).toUpperCase());
+  			}  				
+			returnArr.push(after);
+		} else {
+			returnArr.push(strArr[i]);		
+		}
+  }
+
+  // Only change code above this line
+  return returnArr.join(" ");
+}
+
+function replaceStr(testStr, changeTo) {
+	if (testStr == changeTo) {
+		return after;
+	} else {
+		return testStr;		
+	}
+}
+</pre>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+</body>
+
+
+</html>

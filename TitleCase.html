@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<body style="background: #e2efe2">
+
+<p>Title Case a Sentence.</p>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+
+<pre style="background: #fff; width: 40%; border: 2px solid darkgreen; padding: 5px">
+function titleCase(str) {
+  var strArr = str.split(' ');
+  if (strArr.length > 1) {
+     for (i = 0; i < strArr.length; i++) {
+         var s = strArr[i].toLowerCase();
+         var schars = s.split('');
+         for (j = 0; j < schars.length; j++) {
+             schars[j] = schars[j].toLowerCase();
+         }
+         schars[0] = schars[0].toUpperCase();
+         s= schars.join('');
+         strArr[i] = s;
+     }
+    
+  }
+    
+      return strArr.join(' ');
+}
+</pre>
+<script>
+function titleCase(str) {
+  var strArr = str.split(' ');
+  if (strArr.length > 1) {
+     for (i = 0; i < strArr.length; i++) {
+         var s = strArr[i].toLowerCase();
+         var schars = s.split('');
+         for (j = 0; j < schars.length; j++) {
+             schars[j] = schars[j].toLowerCase();
+         }
+         schars[0] = schars[0].toUpperCase();
+         s= schars.join('');
+         strArr[i] = s;
+     }
+    
+  }
+    
+      return strArr.join(' ');
+}
+
+
+
+document.getElementById("demo").innerHTML = titleCase("I'm a little tea pot");
+
+document.getElementById("demo2").innerHTML = titleCase("sHoRt AnD sToUt");
+
+document.getElementById("demo3").innerHTML = titleCase("HERE IS MY HANDLE HERE IS MY SPOUT");
+</script>
+
+</body>
+</html>

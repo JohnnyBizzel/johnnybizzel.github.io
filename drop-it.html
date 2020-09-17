@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background-color: #e3ddeb">
+<h3>Drop it</h3>
+Drop the elements of an array (first argument), starting from the front,
+ until the predicate (second argument) returns true.
+<br/>
+<br/>
+dropElements([1, 2, 3, 4], function(n) {return n >= 3; });
+<p id="demo"></p>
+
+dropElements([0, 1, 0, 1], function(n) {return n === 1;}); 
+<p id="demo2"></p>
+
+dropElements([1, 2, 3], function(n) {return n > 0;});
+<p id="demo3"></p>
+
+dropElements([1, 2, 3, 4], function(n) {return n > 5;}); 
+<p id="demo4"></p>
+
+dropElements([1, 2, 3, 7, 4,1], function(n) {return n > 3;});
+<p id="demo5"></p>
+
+<pre class="prettyprint linenums">
+function dropElements(arr, func) {
+
+  var finalArr = [];
+  var holdingArr = [];
+  for (var i=0; i < arr.length; i++){
+  	holdingArr.push(arr[i]);
+	holdingArr = holdingArr.filter(func);
+	if (holdingArr.length > 0) {
+		finalArr.push(arr[i]);
+	}
+  }
+  return finalArr;  
+}
+</pre>
+
+<script>
+
+function dropElements(arr, func) {
+  // Drop unwanted elements.
+  var finalArr = [];
+  var holdingArr = [];
+  for (var i=0; i < arr.length; i++){
+  		holdingArr.push(arr[i]);
+		holdingArr = holdingArr.filter(func);
+		if (holdingArr.length > 0) {
+			finalArr.push(arr[i]); 
+			
+		}
+  }
+  
+  return JSON.stringify(finalArr);
+ 
+}
+
+ 
+
+document.getElementById("demo").innerHTML = dropElements([1, 2, 3, 4], function(n) {return n >= 3; });
+														 //  should return 3,4.
+
+document.getElementById("demo2").innerHTML = dropElements([0, 1, 0, 1], function(n) {return n === 1;}); 
+											// should return undefined
+
+document.getElementById("demo3").innerHTML = dropElements([1, 2, 3], function(n) {return n > 0;});
+									 // should return [1, 2, 3];
+		
+document.getElementById("demo4").innerHTML = dropElements([1, 2, 3, 4], function(n) {return n > 5;}); 
+									// should return [].
+
+document.getElementById("demo5").innerHTML = dropElements([1, 2, 3, 7, 4, 1], function(n) {return n > 3;});
+									// should return [7, 4].
+</script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<body style="background: #3A414F">
+<h3 style="color: #FFF">Caesars Cipher</h3>
+
+<p style="color: #FFF">One of the simplest and most widely known ciphers is a Caesar cipher, also known as a shift cipher. In a shift cipher the meanings of the letters are shifted by some set amount.
+<br/>
+A common modern use is the ROT13 cipher, where the values of the letters are shifted by 13 places. Thus 'A' ↔ 'N', 'B' ↔ 'O' and so on.</p>
+
+
+<p id="demo1" style="color: #FFF"></p>
+<p id="demo2" style="color: #FFF"></p>
+<p id="demo3" style="color: #FFF"></p>
+<p id="demo4" style="color: #FFF"></p>
+
+<script>
+function rot13(str) { // LBH QVQ VG!
+  var resArr = [];
+  var testStr = str.split('');
+  var patternAZ = /[A-Z]/;
+  var result = '';
+  var i = 0;
+  var len = testStr.length;
+  for (i = 0; i < len; i++) {      
+      result = testStr[i].match(patternAZ);
+      if (result === null) {
+        resArr.push(testStr[i]);
+      } else { 
+        if (testStr[i].charCodeAt(0) < 78) { 
+          resArr.push(String.fromCharCode(testStr[i].charCodeAt(0) + 13));  
+        } else { 
+          resArr.push(String.fromCharCode(testStr[i].charCodeAt(0) - 13));  
+        }
+      }
+      
+  }
+  
+  return resArr.join('');
+}
+
+
+document.getElementById("demo1").innerHTML = 'SERR PBQR PNZC ... ' + rot13("SERR PBQR PNZC"); // should decode to "FREE CODE CAMP"
+document.getElementById("demo2").innerHTML = 'SERR CVMMN! ... ' + rot13("SERR CVMMN!"); // should decode to "FREE PIZZA!"
+document.getElementById("demo3").innerHTML = 'GUR DHVPX OEBJA QBT WHZCRQ BIRE GUR YNML SBK ... ' + rot13("GUR DHVPX OEBJA QBT WHZCRQ BIRE GUR YNML SBK."); 
+document.getElementById("demo4").innerHTML =  'LBH QVQ VG! ... ' + rot13("LBH QVQ VG!");
+</script>
+<pre class="prettyprint linenums" >
+function rot13(str) { 
+  var resArr = [];
+  var testStr = str.split('');
+  var patternAZ = /[A-Z]/;
+  var result = '';
+  var i = 0;
+  var len = testStr.length;
+  for (i = 0; i < len; i++) {      
+      result = testStr[i].match(patternAZ);
+      if (result === null) {
+        resArr.push(testStr[i]);
+      } else { 
+        if (testStr[i].charCodeAt(0) < 78) { 
+          resArr.push(String.fromCharCode(testStr[i].charCodeAt(0) + 13));  
+        } else { 
+          resArr.push(String.fromCharCode(testStr[i].charCodeAt(0) - 13));  
+        }
+      }      
+  }
+  
+  return resArr.join('');
+}
+</pre>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+</body>
+</html>

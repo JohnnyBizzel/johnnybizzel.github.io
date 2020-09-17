@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Leader board test</title>
+    <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style type="text/css">
+body {
+  background: rgba(140, 220, 180, .4);
+  font-family: verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,  #leaderboard {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  min-width: 450px;
+  background-color: #424241;
+  color: #424241;
+  font-family: 'Roboto', sans-serif;
+}
+
+a, a:visited {
+  text-decoration: none;
+  color: #00B906;
+}
+
+#container {
+  height: 100%;
+  width: 100%;
+  min-width: 450px;
+}
+
+#inner-container {
+  min-height: 50px;
+  width: 100%;
+  min-width: 450px;
+  max-width: 990px;
+  margin: auto;
+  padding: 30px 20px 10px 20px;
+}
+
+#header {
+  height: 50px;
+  background-color: #B9E937;
+  color: #424241;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#inner-header {
+  width: 100%;
+  min-width: 450px;
+  max-width: 990px;
+  padding: 0 20px;
+  margin: auto;
+  
+}
+#inner-header.h2 {
+    margin: 0;
+  }
+
+#footer {
+  height: 40px;
+  color: #F5F5F5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#inner-footer {
+  width: 100%;
+  min-width: 450px;
+  max-width: 990px;
+  padding: 0 20px;
+  margin: auto;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+#leaderboard {
+  table-layout: fixed;
+  width: 100%;
+  min-width: 410px;
+  max-width: 990px;
+  
+}
+
+tr th {
+      height: 45px;
+      background-color: #B9E937;
+    }
+ tr td {
+      height: 40px;
+      padding: 0 10px;
+      background-color: #F5F5F5;
+    }
+ tr   td {
+      text-align: center;
+    }
+  tr  td {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+ tr   td:hover {
+      background-color: #B9E937;
+    }
+ tr   img {
+      display: inline-block;
+      width: 30px;
+      border: 1px solid #424241;
+      border-radius: 8px;
+      margin-right: 7px;
+    }
+  
+
+#position {
+  width: 50px;
+}
+
+#recent, #alltime {
+  cursor: pointer;
+  width: 20%;
+}
+    </style>
+  </head>
+  <body>
+  Boo
+    <div id="leaderboard"></div>
+    
+    
+    <script type="text/babel">
+
+var TableHeader = React.createClass({
+  render: function() {
+    return <thead>
+      <tr>
+        <th>#</th>
+        <th className="name-col">
+          Camper Name
+        </th>
+        <th>
+          Recent
+        </th>
+        <th>
+          Points
+        </th>
+      </tr>  
+    </thead>  
+  }
+});
+
+var Row = React.createClass({
+  render: function() {
+    return <tr>
+      <td className="rank">ID</td>
+      <td className='user-field'>
+        <a className='user' target='_blank' href='http://freecodecamp.com/'><img className='gravatar' src='' /> 
+         <span className='username'>User</span></a>
+      </td>
+      <td className="recent">00</td>
+      <td className="all-time">123</td>
+    </tr>  
+  }
+});
+
+var TableBody = React.createClass({
+  render: function() {
+    return <tbody>
+      <Row />
+    </tbody>  
+  }
+});
+
+var Table = React.createClass({
+  render: function() {
+    return <table>
+      <TableHeader />
+      <TableBody />
+    </table>  
+  } 
+});
+
+var LeaderBoard = React.createClass({
+  render: function() {
+    return <div>
+      <h1 className="board-header">{this.props.title}</h1>
+      <div id="content">
+        <Table />
+      </div>
+    </div>  
+  }
+});
+
+ReactDOM.render(<LeaderBoard title='Camper Leaderboard'/>, document.getElementById('leaderboard'));    </script>
+  </body>
+</html>

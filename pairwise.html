@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background-color: #e1efe1" >
+<h3>Pairwise</h3>
+Given an array arr, find element pairs whose sum equal the second argument arg and return the sum of their indices.
+<br/>
+If multiple pairs are possible that have the same numeric elements but different indices, return the smallest sum of indices. 
+Once an element has been used, it cannot be reused to pair with another.
+<br/>
+<p id="demo">pairwise([1, 4, 2, 3, 0, 5], 7); => </p>
+<p id="demo2">pairwise([1, 3, 2, 4], 4); => </p>
+<p id="demo3">pairwise([1, 1, 1], 2); => </p>
+<p id="demo4">pairwise([0, 0, 0, 0, 1, 1], 1); => </p> 
+<p id="demo5">pairwise([], 100); => </p>
+
+<pre class="prettyprint linenums">
+function pairwise(arr, arg) {
+	var idxAry = [];
+	var sum = 0;
+	if (arr.length < 1) { return 0; } 
+	else {
+			// make an array of indexes as we need these values later.
+		for(var a = 0; a < arr.length; a ++) {
+			idxAry.push(a);		
+		}
+			
+		// looping from first element
+		for(i = 0; i < arr.length; i++) {
+		  	//Looping from second element by setting first element  constant
+		  	for(j = i + 1; j < arr.length; j++) {
+			// Check whether the sum is equal to arg
+			  if(arr[i] + arr[j] == arg) {
+			   	//Add the indices
+			     if (!isNaN(idxAry[i]) && !isNaN(idxAry[j])) {
+				   sum += idxAry[i] + idxAry[j];
+				     //Set the indices to NaN so that they can't be used in next iteration
+				     idxAry[i] = NaN;
+				     idxAry[j] = NaN;		     
+			     }
+			   }
+			}
+		}
+	}	
+  	return sum;
+}
+</pre>
+<script>
+function pairwise(arr, arg) {
+	var idxAry = [];
+	var sum = 0;
+	if (arr.length < 1) { return 0; } else {
+		// make an array of indexes as we need these values later.
+		for(var a = 0; a < arr.length; a ++) {
+			idxAry.push(a);		
+		}
+		
+		 // looping from first element
+	 	for(i = 0; i < arr.length; i++) {
+	   	//Looping from second element by setting first element  constant
+	   	for(j = i + 1; j < arr.length; j++) {
+	   	  // Check whether the sum is equal to arg
+		     if(arr[i] + arr[j] == arg) {
+		       //Add the indices
+		       if (!isNaN(idxAry[i]) && !isNaN(idxAry[j])) {
+			       sum += idxAry[i] + idxAry[j];
+			       //Set the indices to NaN so that they can't be used in next iteration
+			       idxAry[i] = NaN;
+			       idxAry[j] = NaN;
+		       
+		       }
+		     }
+			}
+	
+	 	}
+	}
+  	
+  	return sum;
+}
+
+ 
+
+
+document.getElementById("demo").innerHTML += pairwise([1, 4, 2, 3, 0, 5], 7);   // should return 11 
+
+document.getElementById("demo2").innerHTML += pairwise([1, 3, 2, 4], 4);   // should return 1
+
+document.getElementById("demo3").innerHTML += pairwise([1, 1, 1], 2);  // should return 1
+
+document.getElementById("demo4").innerHTML += pairwise([0, 0, 0, 0, 1, 1], 1);  // should return 1
+
+document.getElementById("demo5").innerHTML += pairwise([], 100);  // should return 0.
+  
+</script>
+<a href="https://github.com/google/code-prettify/blob/master/docs/getting_started.md">code presented in google-code-prettify</a>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+</body>
+
+
+</html>

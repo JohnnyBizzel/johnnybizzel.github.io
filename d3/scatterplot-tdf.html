@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+  <meta charset="UTF-8">
+<!--  <link rel="shortcut icon" type="image/x-icon" href="https://production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />-->
+  <link rel="mask-icon" type="" href="https://production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" />
+  <title>D3 Scatterplot - Alpe d&#39;Huez best times</title>
+ <style>
+ body {
+   background-image: url("https://c2.staticflickr.com//1/339/18453911064_189c197358_h.jpg"); 
+   background-size: cover;
+   background-repeat: no-repeat;
+  font-weight: bold;
+}
+#header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items:center;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+#header img {
+  box-shadow: 2px 2px 10px #1252a2;
+}
+
+#graph{
+  margin-left: auto;
+  margin-right: auto;
+  width: 960px;
+  height:530px;
+  opacity: 0.75;
+  font-weight: bold;
+}
+footer {
+  margin: 20px;
+  text-align: center;
+  font-size: 0.7em;
+}
+
+.chart {
+  background-color: #fff;
+  border: 0px solid black;
+}
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 180px;
+  height: auto;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 6px;
+  pointer-events: none;
+}
+  </style>
+
+</head>
+
+<body translate="no" >
+
+  <div id="header">
+  <img src="https://pbs.twimg.com/profile_images/755294626601398273/Qx99LwDZ_400x400.jpg" style="height:100px;width:100px"/>
+  <h2>&emsp;Le meilleur temps sur Alpe d'Huez&emsp;</h2>
+  <br/> 
+</div>
+ <div id="graph">
+    <svg class="chart"></svg>
+  </div>
+<footer>
+  Photo credit <a href="https://www.flickr.com/photos/johnseb/18453911064/in/album-72157654291433668/">JohnSeb</a>
+</footer>
+  
+  <script src='https://d3js.org/d3.v4.js'></script>
+
+ <script>
+      d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/cyclist-data.json", function(data) {
+  
+  var fastestTime = data[0].Seconds;
+  var thirtyFifthBestTime = data[data.length - 1].Seconds;  
+  var totalWidth = 925;
+  var totalHeight = 530;
+
+  var margin = {
+      top: 20,
+      right: 30,
+      bottom: 60,
+      left: 60
+    },
+    actualWidth = totalWidth - margin.left - margin.right,
+    actualHeight = totalHeight - margin.top - margin.bottom;
+
+  var yAxisScale = d3.scaleLinear()
+    .range([0, actualHeight-5])
+    .domain([1, 35]);
+
+  var yAxis = d3.axisLeft()
+    .scale(yAxisScale)
+    .ticks(30);
+  
+  // set up X axis values
+  // Best time is 00:00
+  // Other times are + this time
+  var xTimesFromBest = data.map(t => t.Seconds - fastestTime);
+
+  var xAxisScale = d3.scaleLinear()
+    .range([20, actualWidth-60])
+    .domain([xTimesFromBest[34],xTimesFromBest[0]]);
+
+  var labelValues = xTimesFromBest.map(secs => {
+                       var t = new Date(2012, 0, 1, 0, 0, secs);    
+    return t;})
+  // this +5 is a best guess to get the X-axis to be a complete line
+  // I add another value just for the labels which means labelValues
+  // had one more array item
+  var padding = new Date(2012, 0, 1, 0, 0, (xTimesFromBest[34]+5));
+  labelValues.push(padding);
+  
+  var xAxisLabel = d3.scaleLinear()
+    .range([0, actualWidth-60])
+    .domain([labelValues[35],labelValues[0]]);
+  
+  var xAxis = d3.axisBottom(xAxisLabel)
+    .ticks(16)
+    .tickFormat(d3.timeFormat("%M:%S"));
+  
+
+  var div = d3.select("#graph").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+  
+  var chart = d3.select(".chart")
+    .attr("width", totalWidth)
+    .attr("height", totalHeight)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // Bind data
+  var dots = chart.selectAll("circle")
+    .data(data)
+    .enter().append("circle")
+    .attr("r", 5)
+    .attr("cx", function(d, i) { return xAxisScale(d.Seconds - fastestTime); })
+    .attr("cy", function(d, i) { return  yAxisScale(i+1); }) // i+1 is the same as using d.Place
+    .style("fill", function(d) { return d.Doping !== '' ? "orange" :  "green" })   
+    .on("mouseover", function(d) {
+       div.transition()
+         .duration(200)
+         .style("opacity", 1.0);
+      var htmlCode = d.Name + ' ' + '[' + d.Nationality + ']' + '<br/>' +
+         'Time: ' + d.Time + ', Year: ' + d.Year + '<br/>' +
+          'Doping allegation: ' + (d.Doping !== '' ? d.Doping : 'none');
+       div.html(htmlCode)
+         .style("left", (d3.event.pageX) + "px")
+         .style("top", (d3.event.pageY - 28) + "px");
+       })
+    .on("mouseout", function(d) {
+       div.transition()
+         .duration(200)
+         .style("opacity", 0);
+       });
+
+  
+  // Add labels for dots
+chart.selectAll("text")
+   .data(data).enter()
+  .append("text")
+  .text(function(d) {
+                    return d.Name;
+                })
+    .attr("x", function(d) {
+      return xAxisScale(d.Seconds - fastestTime - 2);
+      // Returns scaled location of x
+    })
+    .attr("y", function(d,i) {
+      return yAxisScale(i+1.2);  // Returns scaled circle y
+    })
+    .attr("font_family", "sans-serif")  // Font type
+    .attr("font-size", "10px")  // Font size
+    .attr("fill", "blue");
+ 
+
+  chart.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + actualHeight + ")")
+    .call(xAxis);
+
+  chart.append("g")
+    .call(yAxis)
+
+  // X-axis label
+  chart.append("g")
+    .append("text")
+    .attr("x", totalWidth - margin.right - 420)
+    .attr("y", totalHeight - margin.bottom)
+    .attr("dy", "1.2em")
+    .style("font-size", "20px")
+    .text("Minutes & seconds after best time");
+
+  // Y-axis label
+  chart.append("text")
+    .attr("x", -58)
+    .attr("y", -59)
+    .attr("dy", "1.2em")
+    .attr('transform', 'rotate(-90)')
+    .style("font-size", "20px")
+    .text("RANK");
+
+  // Legend
+  chart.append("g")
+    .append("text")
+    .attr("x", totalWidth - margin.right - 240)
+    .attr("y", totalHeight - 300)
+    .attr("dy", "1.2em")
+    .style("font-size", "12px")
+    .text("No doping allegations");
+ 
+  chart.append("circle")
+    .attr("r", 5)
+    .attr("cx", totalWidth - margin.right - 250 )
+    .attr("cy", totalHeight - 290)
+    .style("fill", "green");
+  
+  chart.append("g")
+    .append("text")
+    .attr("x", totalWidth - margin.right - 240)
+    .attr("y", totalHeight - 280)
+    .attr("dy", "1.2em")
+    .style("font-size", "12px")
+    .text("Has had doping allegations");
+  
+  chart.append("circle")
+    .attr("r", 5)
+    .attr("cx", totalWidth - margin.right - 250 )
+    .attr("cy", totalHeight - 270)
+    .style("fill", "orange");
+  
+})
+    </script>
+
+</body>
+
+</html>
+ 

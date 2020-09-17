@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>MET Office UK Weather</title>
+ <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+<style type="text/css">
+.flexcontainer {
+	display: flex;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  
+}
+img {
+	height: 150px;
+	width: 150px;
+}
+
+.margin-sm {
+	margin: 10px
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container-fluid">
+<h1>UK Weather</h1>
+
+<section class="col-xs-12 col-sm-6 col-md-4">
+<h2 id="ipLocation"></h2>
+	<div class="form-group well">
+		<label for="testLat">Lat:</label>
+		<br/>
+		<input type="text" id="testLat" />
+		<br/>
+		<label for="testLong">Long:</label>
+		<br/>
+		<input type="text" id="testLong" />
+		<button class="btn btn-default pull-right" id="test">Get Weather</button>
+	
+	</div>
+</section>
+<p id="root">This weather app picks up your location from your internet address but you can search for any place via lat/long co-ords</p>
+<h3>You nearest weather station:</h3>
+<p id="local" class="h3">searching...</p>
+</div>
+<div class="container">
+	<div class="row flexcontainer">
+	
+		<!-- today and next 4 days -->
+		<div id="day1" class="margin-sm text-center">
+			<strong>Today</strong>
+			<br/>
+			<img id="img1" src="images/clear.png">
+			<br/>
+			<p id="desc1"></p>
+			<br/>
+			<span id="temp1">00</span>
+		</div>
+		<div id="day2" class="margin-sm text-center">
+		<strong>Tomorrow</strong>
+			<br/>
+			<img id="img2" src="images/partly-cloudy.png">
+			<br/>
+			<p id="desc2"></p>
+			<br/>
+			<span id="temp2">00</span>
+		</div>
+		<div id="day3" class="margin-sm text-center">
+		<strong>Day 3</strong>
+			<br/>
+			<img id="img3" src="images/sleet.png">
+			<br/>
+			<p id="desc3"></p>
+			<br/>			
+			<span id="temp3">00</span>
+		</div>
+		<div id="day4" class="margin-sm text-center">
+		<strong>Day 4</strong>
+			<br/>
+			<img id="img4" src="images/rain.png">
+			<br/>
+			<p id="desc4"></p>
+			<br/>			
+			<span id="temp4">00</span>
+		</div>
+	
+	
+	</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+var nearestValue = 10000;
+var nearestID = 0;
+function findNearest(startLat, startLon, lat,lon, testID) {
+		 
+		if (nearestValue > 9999) { // set initial value
+          nearestID = testID;
+			if ((startLat < 0 && lat < 0) || (startLat >= 0 && lat >= 0)) {
+				nearestValue = Math.abs((startLat) - (lat));				 			
+			} else {
+        nearestValue = (startLat - lat);
+      }
+    
+    	if ((startLon < 0 && lon < 0) || (startLon >= 0 && lon >= 0)) {
+				nearestValue += Math.abs((startLon) - (lon));				 			
+			} else {
+        nearestValue += (startLon - lon);
+              nearestID = testID;
+      }
+      
+      nearestValue = Math.abs(nearestValue); 
+        return (nearestValue);  
+			
+		} else {
+		    var currentVal = 0
+		  	if ((startLat < 0 && lat < 0) || (startLat >= 0 && lat >= 0)) {
+				  currentVal = Math.abs((startLat) - (lat));				 			
+			  } else {
+          currentVal = (startLat - lat);
+        }
+  
+      	if ((startLon < 0 && lon < 0) || (startLon >= 0 && lon >= 0)) {
+  				currentVal += Math.abs((startLon) - (lon));				 			
+  			} else if (startLon < 0 && lon >= 0) {
+          currentVal += Math.abs(startLon - lon);
+        } else { 
+          currentVal += startLon - lon;
+        }
+    
+          //var currentVal = Math.abs(startLat) - Math.abs(lat) + Math.abs(startLon) - Math.abs(lon);
+        if (nearestValue > Math.abs(currentVal)) {
+          nearestValue = Math.abs(currentVal);
+          nearestID = testID;
+        }
+    }
+    return (nearestID);
+}
+
+function weatherDesc(code) {
+	var desc = "";
+	switch(Number(code)) {	
+		case 0: 
+			desc = "Clear night";
+			break;
+		case 1: 
+			desc = "Sunny day";
+			break;
+		case 2:
+		case 3:
+			desc = "Partly cloudy";
+			break;
+		case 5:
+			desc = "Mist";
+			break;
+		case  6 :
+			desc = "Fog";
+			break;
+		case  7 :
+			desc = "Cloudy";
+			break;
+		case  8:
+			desc = "Overcast";
+			break;
+		case  9:
+		case 10 :
+			desc = "Light rain shower";
+			break;
+		case  11:
+			desc = "Drizzle";
+			break;
+		case  12 :
+			desc = "Light rain";
+			break;
+		case  13:
+		case  14:
+			desc = "Heavy rain shower";
+			break;
+		case  15:
+			desc = "Heavy rain";
+			break;
+		case  16:
+		case 17:
+			desc = "Sleet shower";
+			break;
+		case  18: 
+			desc = "Sleet";
+			break;
+		case  19:
+		case 20:
+			desc = "Hail shower";
+			break;
+		case 21: 
+			desc = "Hail";
+			break;
+		case 22:
+		case 23: 
+			desc = "Light snow shower";
+			break;
+		case 24:
+			desc = "Light snow";
+			break;
+		case  25:
+		case  26 :
+			desc = "Heavy snow shower";
+			break;
+		case  27:
+			desc = "Heavy snow";
+			break;				
+		case  28:
+		case 29: 
+			desc = "Thunder shower";
+			break;				
+		case  30:
+			desc = "Thunder";
+			break;				
+		default:
+			desc = "weather unknown" 																					
+	}
+	return desc;
+}
+
+function weatherPicture(code) {
+	var image = "";
+	switch(Number(code)) {	
+		case 0: 
+			// "Clear night";
+			image = "clear-night";
+			break;
+		case 1: 
+			// "Sunny day";
+			image = "clear";
+			break;
+		case 2:
+		case 3:
+			// "Partly cloudy";
+			image = "partly-cloudy";
+			break;
+		case 5:
+		case 6:		
+			// 5 "Mist";
+			// 6 "Fog";
+			image = "fog";	
+			break;
+		case  7 :
+		case  8:
+			// 7 "Cloudy";
+			// 8 "Overcast";
+			image = "cloudy";
+		break;
+		case  9:
+		case 10 :
+			// 9,10 "Light rain shower";
+			// 11 "Drizzle";
+			image = "scattered-showers";
+			break;		
+		case  12 :
+			// "Light rain";
+			image = "cloudy-scattered-showers";
+			break;
+		case  13:
+		case  14:
+		case  15:
+			// 13,14 = "Heavy rain shower";
+			// 15 = "Heavy rain";
+			image = "rain";
+			break;
+		case 16:
+		case 17:
+			// "Sleet shower";
+		case  18: 
+			// "Sleet";
+		case  19:
+		case 20:
+			// desc = "Hail shower";
+		case 21: 
+			// desc = "Hail";
+			image = "sleet";
+			break;
+		case 22:
+		case 23: 
+			//desc = "Light snow shower";
+		case 24:
+			//desc = "Light snow";
+		case  25:
+		case  26:
+			//desc = "Heavy snow shower";	
+		case  27:
+			//desc = "Heavy snow";
+			image = "snow";
+			break;				
+		case  28:
+		case 29: 
+			// desc = "Thunder shower";		
+		case  30:
+			// desc = "Thunder";
+			image = "thunderstorm";
+			break;				
+		default:
+			desc = "weather unknown" 																					
+	}
+	return image;
+}
+
+  $(document).ready(function() {
+  	var startingLat = 0;
+	var startingLong = 0;
+  /* Free for 1000 accesses per day */
+  	$.getJSON("https://ipapi.co/json", function(ipjson) {
+  		startingLat = ipjson.latitude;
+  		startingLong = ipjson.longitude;
+  		$('#testLat').val(startingLat);
+  		$('#testLong').val(startingLong);
+  		$('#ipLocation').text(ipjson.city);
+  	});	
+  
+  		    
+		$('#test').click(function () {
+			startingLat = $('#testLat').val();
+			startingLong = $('#testLong').val();
+		   nearestValue = 10000;
+			
+			$.getJSON("METsitelist.json", function(json) {
+
+			    	// elevation
+			    	// id
+			    	// latitude
+			    	// longitude
+			    	// region
+			    	// unitaryAuthArea
+			    	
+			    	// Work out nearest
+			    	for(var i=0; i< json.Locations.Location.length; i++) {
+			    		var idOfNearestStation = findNearest(startingLat, startingLong,
+			    															json.Locations.Location[i].latitude,
+			    															json.Locations.Location[i].longitude,
+			    															json.Locations.Location[i].id)
+			    	}
+			    	/*$('#local').html("ID nearest: "+ idOfNearestStation + '<br/>');*/
+			    	$.getJSON("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + idOfNearestStation + '?res=3hourly&key=3b40dfa1-885a-467d-bd87-609f1afa4c15', function (weatherJson) {
+			    		console.log(weatherJson.SiteRep.DV.Location.name);
+			    		$('#local').text('');
+			    		$('#local').append(weatherJson.SiteRep.DV.Location.name + ', '+ weatherJson.SiteRep.DV.Location.country + '<br/>');
+			    		$('#local').append(weatherJson.SiteRep.DV.Location.Period[0].Rep[0].T + ' C, wind speed '+ weatherJson.SiteRep.DV.Location.Period[0].Rep[0].S + ' <br/>');
+			    		$('#desc1').text(weatherDesc(weatherJson.SiteRep.DV.Location.Period[0].Rep[0].W));
+			    		$('#desc2').text(weatherDesc(weatherJson.SiteRep.DV.Location.Period[1].Rep[0].W));
+			    		$('#desc3').text(weatherDesc(weatherJson.SiteRep.DV.Location.Period[2].Rep[0].W));
+			    		$('#desc4').text(weatherDesc(weatherJson.SiteRep.DV.Location.Period[3].Rep[0].W));
+						$('#temp1').html(weatherJson.SiteRep.DV.Location.Period[0].Rep[0].T + '&deg;C');
+			    		$('#temp2').html(weatherJson.SiteRep.DV.Location.Period[1].Rep[0].T + '&deg;C');
+			    		$('#temp3').html(weatherJson.SiteRep.DV.Location.Period[2].Rep[0].T + '&deg;C');
+			    		$('#temp4').html(weatherJson.SiteRep.DV.Location.Period[3].Rep[0].T + '&deg;C');
+			    		$('#img1').attr("src", "images/" + weatherPicture(weatherJson.SiteRep.DV.Location.Period[0].Rep[0].W) + ".png");
+			    		$('#img2').attr("src", "images/" + weatherPicture(weatherJson.SiteRep.DV.Location.Period[1].Rep[0].W) + ".png");
+			    		$('#img3').attr("src", "images/" + weatherPicture(weatherJson.SiteRep.DV.Location.Period[2].Rep[0].W) + ".png");
+			    		$('#img4').attr("src", "images/" + weatherPicture(weatherJson.SiteRep.DV.Location.Period[3].Rep[0].W) + ".png");
+			    	});
+			});
+		})  
+		
+	});
+
+
+//function readTextFile(file) {
+//    var rawFile = new XMLHttpRequest();
+//    
+//    rawFile.onreadystatechange = function ()
+//    {
+//        if(this.readyState == 4 && this.status == 200)
+//         {
+//             var allText = this.responseText;
+//             return allText;
+//         }
+//     }
+//    rawFile.open("GET", file, true);
+//    rawFile.responseType = 'json';
+//    rawFile.send();
+//    var allText = rawFile.responseText;
+//    return allText;
+//}
+//
+//var textFile = readTextFile('METsitelist.json');
+//
+//console.log(textFile);
+
+
+</script>
+</body>
+</html>

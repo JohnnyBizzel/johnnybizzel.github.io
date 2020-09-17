@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background-color: #f3e6ef">
+<h3>Binary Agent</h3>
+Return an English translated sentence of the passed binary string.
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<p id="demo5"></p>
+<pre class="prettyprint linenums">
+function binaryAgent(str) {
+  var items = str.split(' ');
+  var finalString = "";
+  var strLen = items.length;
+  var it;
+  for (it=0; it < strLen; it++) {
+  		 var s = items[it].split('');    // my binary "number" as a string
+		 var dec = 0;
+		 var sLen = s.length;
+		 var i;
+		 for( i=0; i < sLen; i++ ) {
+			  // we start with the least significant digit, and work our way to the left
+			  if( s[s.length-i-1] == '0' ) continue;
+			    dec += Math.pow( 2, i );
+			    
+		 }
+    	finalString += String.fromCharCode(dec);	 
+		  	
+  }
+		  
+  return finalString;
+}
+</pre>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+<script>
+
+function binaryAgent(str) {
+  var items = str.split(' ');
+	var finalString = "";
+	var strLen = items.length;
+	var it;
+  for (it=0; it < strLen; it++) {
+  		 var s = items[it].split('');    // my binary "number" as a string
+		 var dec = 0;
+		 var sLen = s.length;
+		 var i;
+		 for( i=0; i < sLen; i++ ) {
+			  // we start with the least significant digit, and work our way to the left
+			  if( s[s.length-i-1] == '0' ) continue;
+			    dec += Math.pow( 2, i );
+			    
+		 }
+    	finalString += String.fromCharCode(dec);	 
+		  	
+  }
+		  
+  return finalString;
+}
+
+ 
+
+document.getElementById("demo").innerHTML = binaryAgent("01000001 01110010 01100101 01101110 00100111 01110100 00100000 01100010 01101111 01101110 01100110 01101001 01110010 01100101 01110011 00100000 01100110 01110101 01101110 00100001 00111111"); 
+			// should return "Aren't bonfires fun!?"
+
+document.getElementById("demo2").innerHTML = binaryAgent("01001001 00100000 01101100 01101111 01110110 01100101 00100000 01000110 01110010 01100101 01100101 01000011 01101111 01100100 01100101 01000011 01100001 01101101 01110000 00100001");
+		 // should return "I love FreeCodeCamp!"
+
+
+
+</script>
+
+</body>
+
+
+</html>

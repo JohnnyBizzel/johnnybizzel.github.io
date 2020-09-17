@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajblk.github.io/SyntaxHighlightGenerator-v3.0/scripts/sh-v3.0-min.js"></script>
+<link type="text/css" rel="stylesheet" href="http://ajblk.github.io/SyntaxHighlightGenerator-v3.0/styles/shCoreDefault.css"/>
+</head>
+
+<body onload="prettyPrint()" style="background: silver">
+<h3>Smallest common multiple</h3>
+<a href="http://www.mathsisfun.com/least-common-multiple.html">Least common multiple explained</a>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function createArray(arr) {
+
+	var a = arr[0];
+	var b = arr[1];
+	var newArr = [];
+
+ 	if (a > b) {
+ 		
+ 		newArr.push(b);
+ 		while (a > b) {
+			b++;
+			newArr.push(b); 		
+ 		}
+ 	} else {
+ 		newArr.push(a);
+ 		while (b > a) {
+			a++;
+			newArr.push(a); 		
+ 		}
+ 	} 
+ 	return newArr;
+       
+}
+
+function lcm(t1,t2)
+{	var f = hcf(t1,t2);
+	return t1 *t2 /f;
+}
+
+function hcf(a,b) {
+		var gcd=1;
+		if (a > b) {
+			a = a + b;
+			b = a - b;
+			a = a - b;
+		}
+		if ((b ==(Math.round(b / a)) * a))
+			{ gcd = a; }
+		else { 
+			for (var i=Math.round(a / 2); i > 1; i-- )
+			{  if((a == (Math.round(a / i)) * i))
+					if((b == (Math.round(b / i)) * i))
+					{	gcd=i;	
+						i=-1;
+					}
+			}
+		}
+		return gcd;
+}
+	
+
+function smallestCommons(arr) {
+
+	var numbers = createArray(arr);
+	var scm;
+	var a = numbers[0];
+	scm = a;
+	
+	if (numbers.length === 2) return lcm(a, numbers[1]);
+	if (numbers.length > 2) {
+		// recursion needed
+		scm = lcm(a, numbers[1]);
+		var i;
+		var len = numbers.length;
+		for(i = 1; i < len - 1; i++) {
+			scm = lcm(scm,numbers[i+1]);
+   		}
+	}	
+
+  	return scm;
+}
+
+
+
+document.getElementById("demo").innerHTML = smallestCommons([1,5]);    // should return 60
+
+document.getElementById("demo2").innerHTML = smallestCommons([5,1]);  // should return 60
+
+document.getElementById("demo3").innerHTML = smallestCommons([1, 13]); // return 360360
+
+document.getElementById("demo4").innerHTML =  smallestCommons([3, 4]); // = 12  
+</script>
+
+<!-- CODE OUTPUT -->
+
+
+<pre  class="prettyprint linenums" >
+function createArray(arr) {
+
+    var a = arr[0];
+    var b = arr[1];
+    var newArr = [];
+
+    if (a &gt; b) {
+        
+        newArr.push(b);
+        while (a &gt; b) {
+            b++;
+            newArr.push(b);         
+        }
+    } else {
+        newArr.push(a);
+        while (b &gt; a) {
+            a++;
+            newArr.push(a);         
+        }
+    } 
+    return newArr;
+       
+}
+
+// Lowest common multiple
+function lcm(t1,t2)
+{   var f = hcf(t1,t2);
+    return t1 *t2 /f;
+}
+
+// Highest common factor
+function hcf(a,b) {
+        var gcd=1;
+        if (a &gt; b) {
+            a = a + b;
+            b = a - b;
+            a = a - b;
+        }
+        if ((b ==(Math.round(b / a)) * a))
+            { gcd = a; }
+        else { 
+            for (var i=Math.round(a / 2); i &gt; 1; i-- )
+            {  if((a == (Math.round(a / i)) * i))
+                    if((b == (Math.round(b / i)) * i))
+                    {   gcd=i;  
+                        i=-1;
+                    }
+            }
+        }
+        return gcd;
+}
+    
+
+function smallestCommons(arr) {
+
+    var numbers = createArray(arr);
+    var scm;
+    var a = numbers[0];
+    scm = a;
+    
+    if (numbers.length === 2) return lcm(a, numbers[1]);
+    
+    if (numbers.length &gt; 2) {
+      // recursion needed
+      scm = lcm(a, numbers[1]);
+      for(i = 1; i &lt; numbers.length - 1; i++)
+    	{
+      	scm = lcm(scm,numbers[i+1]);
+       }
+            
+    }  
+
+    return scm;
+}
+</pre>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+
+</body>
+
+
+</html>

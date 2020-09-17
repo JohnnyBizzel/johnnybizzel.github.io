@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link  rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body style="background: #efefe2">
+<h3>Sum all numbers in a range.</h3>
+
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function getSum(total, num) {
+    return total + num;
+}
+
+function sumAll(arr) {
+ 	
+ 	arr.sort(function(a, b){return a-b});
+	var  minItem = Math.max(arr[0]);
+ 	var maxItem = Math.min(arr[1]); 	
+	var completeArr =[]; 	
+ 	for (i=minItem; i <= maxItem; i++) {
+		 	completeArr.push(i);
+ 	} 
+  return completeArr.reduce(getSum);
+}
+
+
+
+document.getElementById("demo").innerHTML = sumAll([1, 4]);    
+
+document.getElementById("demo2").innerHTML = sumAll([4, 1]);  // should return 10
+
+document.getElementById("demo3").innerHTML = sumAll([5, 10]); // should return 45.
+
+document.getElementById("demo4").innerHTML = sumAll([10, 5]); // should return 45.
+ 
+</script>
+<pre>
+function getSum(total, num) {
+    return total + num;
+}
+
+function sumAll(arr) {
+ 	
+ 	arr.sort(function(a, b){return a-b});
+	var  minItem = Math.max(arr[0]);
+ 	var maxItem = Math.min(arr[1]); 	
+	var completeArr =[]; 	
+ 	for (i=minItem; i <= maxItem; i++) {
+		 	completeArr.push(i);
+ 	} 
+  return completeArr.reduce(getSum);
+}
+
+</pre>
+</body>
+
+
+</html>

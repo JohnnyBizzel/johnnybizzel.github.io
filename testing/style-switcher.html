@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Style switcher example</title>
+    <link id="pagestyle" rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css'>
+</head>
+<body>
+  
+   <header>
+    <button id="boots-btn" > Default Style Sheet </button>
+    <button id="dark-btn" > Dark Style Sheet </button>
+</header>
+<article>
+  <p>
+    Here is your invoice. Please pay within 2 weeks. Usual terms and conditions apply.    
+  </p>
+  <table>
+ <caption>A complex table</caption>
+ <thead>
+  <tr>
+   <th colspan="3">Invoice #123456789</th>
+   <th>14 January 2025
+  </tr>
+  <tr>
+   <td colspan="2">
+    <strong>Pay to:</strong><br>
+    Acme Billing Co.<br>
+    123 Main St.<br>
+    Cityville, NA 12345
+   </td>
+   <td colspan="2">
+    <strong>Customer:</strong><br>
+    John Smith<br>
+    321 Willow Way<br>
+    Southeast Northwestershire, MA 54321
+   </td>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <th>Name / Description</th>
+   <th>Qty.</th>
+   <th>@</th>
+   <th>Cost</th>
+  </tr>
+  <tr>
+   <td>Paperclips</td>
+   <td>1000</td>
+   <td>0.01</td>
+   <td>10.00</td>
+  </tr>
+  <tr>
+   <td>Staples (box)</td>
+   <td>100</td>
+   <td>1.00</td>
+   <td>100.00</td>
+  </tr>
+ </tbody>
+ <tfoot>
+  <tr>
+   <th colspan="3">Subtotal</th>
+   <td> 110.00</td>
+  </tr>
+  <tr>
+   <th colspan="2">Tax</th>
+   <td> 8% </td>
+   <td>8.80</td>
+  </tr>
+  <tr>
+   <th colspan="3">Grand Total</th>
+   <td>$ 118.80</td>
+  </tr>
+ </tfoot>
+</table>
+
+
+<!-- Read more: https://html.com/tables/#ixzz5CB0BUgYA
+ -->
+</article>
+  
+<script>
+function swapStyleSheet(sheet) {
+  console.log('swapper');
+   var fileref=document.getElementById("pagestyle") ;
+   fileref.setAttribute("rel", "stylesheet");
+   fileref.setAttribute("type", "text/css");
+   fileref.setAttribute("href", sheet);
+
+/*
+     if (typeof fileref!="undefined") {
+       var linkCss = document.getElementById("pagestyle") ;
+       linkCss = fileref; 
+    } 
+    */
+     
+}
+
+function initate() {
+    var style1 = document.getElementById("boots-btn");
+    var style2 = document.getElementById("dark-btn");
+    
+  style1.onclick = function () { swapStyleSheet("https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css"); };
+  style2.onclick = function () { swapStyleSheet("http://coding.citytravelling.me.uk/styles/dark-style.css"); };
+}
+
+window.onload = initate;
+</script>
+
+</body>
+</html>

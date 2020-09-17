@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background: #efefe2">
+<h3>Condense arrays with reduce</h3>
+Reduce examples...
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+var array = [4,5,6,7,8];
+var singleVal = 0;
+
+// Only change code below this line.
+
+singleVal = array.reduce(function(prev,curr) { return (prev + curr);});
+ 
+
+document.getElementById("demo").innerHTML = "array = [4,5,6,7,8]; reduced = " + singleVal;	
+
+</script>
+<pre style="background: #fff; padding: 8px">
+singleVal = array.reduce(function(prev,curr) { return (prev + curr);});
+</pre>
+</body>
+
+
+</html>

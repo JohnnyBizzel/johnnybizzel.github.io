@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajblk.github.io/SyntaxHighlightGenerator-v3.0/scripts/sh-v3.0-min.js"></script>
+<link type="text/css" rel="stylesheet" href="http://ajblk.github.io/SyntaxHighlightGenerator-v3.0/styles/shCoreDefault.css"/>
+
+</head>
+
+<body style="background-color: #e0e0ea">
+<h3>Validate US Telephone Numbers</h3>
+Return true if the passed string is a valid US phone number.
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<p id="demo5"></p>
+
+
+
+<script>
+
+function telephoneCheck(str) {
+  if (str.charAt(0) == '(' && str.charAt(4) != ')') return false;
+
+  if (str.replace(/[^0-9]/g,"").length === 10) {
+    	var re = /([0-9]{3}-?|\([\d]{3}\))[0-9]{3}-?[0-9]{4}/g;
+		return re.test(str);
+  } else {
+  		var reggie = /(1\s|1||])\s?([0-9]{3}[-?| ?]|\([\d]{3}\)) ?[0-9]{3}[-?| ?][0-9]{4}/g;
+		var valid = reggie.test(str);
+		if (valid && str.charAt(0) == '1' && (str.charAt(1) == ' ' || str.charAt(1) == '('))
+		 { return true; } else {
+		 	return false;
+		 } 
+  }
+
+
+}
+
+
+
+document.getElementById("demo").innerHTML = "555-555-5555 = " + telephoneCheck("555-555-5555");
+
+document.getElementById("demo2").innerHTML = "1 555-555-5555 = " + telephoneCheck("1 555-555-5555"); // true
+document.getElementById("demo3").innerHTML = "(555)555-5555 = " + telephoneCheck("(555)555-5555"); // true.
+document.getElementById("demo4").innerHTML = "2 (757) 622-7382 = " + telephoneCheck("2 (757) 622-7382"); // false
+		
+document.getElementById("demo5").innerHTML = "55555555  = " + telephoneCheck("55555555"); // false 
+											// should return undefined.
+
+
+</script>
+
+<div id="highlighterMainDiv_219697" class="syntaxhighlighter jscript"><div id="toolbarContainer_219697" class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td>&nbsp;</td></tr><tr><td class="gutter"><div class="line number1 index0 alt2">01</div><div class="line number2 index1 alt1">02</div><div class="line number3 index2 alt2">03</div><div class="line number4 index3 alt1">04</div><div class="line number5 index4 alt2">05</div><div class="line number6 index5 alt1">06</div><div class="line number7 index6 alt2">07</div><div class="line number8 index7 alt1">08</div><div class="line number9 index8 alt2">09</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div></td><td id="codeContainer_219697" class="code"><div id="container_219697" class="container"><div class="line number1 index0 alt2"><code class="jscript keyword">function</code> <code class="jscript plain">telephoneCheck(str) {</code></div><div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript keyword">if</code> <code class="jscript plain">(str.charAt(0) == </code><code class="jscript string">'('</code> <code class="jscript plain">&amp;&amp; str.charAt(4) != </code><code class="jscript string">')'</code><code class="jscript plain">) </code><code class="jscript keyword">return</code> <code class="jscript keyword">false</code><code class="jscript plain">;</code></div><div class="line number3 index2 alt2">&nbsp;</div><div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript keyword">if</code> <code class="jscript plain">(str.replace(/[^0-9]/g,</code><code class="jscript string">""</code><code class="jscript plain">).length === 10) {</code></div><div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript keyword">var</code> <code class="jscript plain">re = /([0-9]{3}-?|\([\d]{3}\))[0-9]{3}-?[0-9]{4}/g;</code></div><div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript keyword">return</code> <code class="jscript plain">re.test(str);</code></div><div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript plain">} </code><code class="jscript keyword">else</code> <code class="jscript plain">{</code></div><div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript keyword">var</code> <code class="jscript plain">reggie = /(1\s|1||])\s?([0-9]{3}[-?| ?]|\([\d]{3}\)) ?[0-9]{3}[-?| ?][0-9]{4}/g;</code></div><div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript keyword">var</code> <code class="jscript plain">valid = reggie.test(str);</code></div><div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript keyword">if</code> <code class="jscript plain">(valid &amp;&amp; str.charAt(0) == </code><code class="jscript string">'1'</code> <code class="jscript plain">&amp;&amp; (str.charAt(1) == </code><code class="jscript string">' '</code> <code class="jscript plain">|| str.charAt(1) == </code><code class="jscript string">'('</code><code class="jscript plain">))</code></div><div class="line number11 index10 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript plain">{ </code><code class="jscript keyword">return</code> <code class="jscript keyword">true</code><code class="jscript plain">; } </code><code class="jscript keyword">else</code> <code class="jscript plain">{</code></div><div class="line number12 index11 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript keyword">return</code> <code class="jscript keyword">false</code><code class="jscript plain">;</code></div><div class="line number13 index12 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript plain">} </code></div><div class="line number14 index13 alt1"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript plain">}</code></div><div class="line number15 index14 alt2">&nbsp;</div><div class="line number16 index15 alt1">&nbsp;</div><div class="line number17 index16 alt2"><code class="jscript plain">}</code></div><div class="line number18 index17 alt1">&nbsp;</div><div class="line number19 index18 alt2"><code class="jscript plain">}</code></div></div></td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></tbody></table></div>
+
+<pre id="presourcecode_219697" class="displaysourcecode" >
+function telephoneCheck(str) {
+  if (str.charAt(0) == '(' &amp;&amp; str.charAt(4) != ')') return false;
+
+  if (str.replace(/[^0-9]/g,"").length === 10) {
+        var re = /([0-9]{3}-?|\([\d]{3}\))[0-9]{3}-?[0-9]{4}/g;
+        return re.test(str);
+  } else {
+        var reggie = /(1\s|1||])\s?([0-9]{3}[-?| ?]|\([\d]{3}\)) ?[0-9]{3}[-?| ?][0-9]{4}/g;
+        var valid = reggie.test(str);
+        if (valid &amp;&amp; str.charAt(0) == '1' &amp;&amp; (str.charAt(1) == ' ' || str.charAt(1) == '('))
+         { return true; } else {
+            return false;
+         } 
+  }
+
+
+}
+
+}
+</pre>
+
+<script type="text/javascript">SyntaxHighlighter.initialize();</script>
+</body>
+
+
+</html>

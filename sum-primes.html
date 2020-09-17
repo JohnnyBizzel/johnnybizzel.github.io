@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+
+<body style="background: #F1D9FD">
+<h3>Sum Prime numbers</h3>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<p id="demo5"></p>
+
+<script>
+
+function check_prime(a)
+{
+   var c = 2;
+ 
+   for ( c = 2 ; c <= a - 1 ; c++ )
+   { 
+      if ( a % c === 0 )
+	   return false;
+   }
+   if ( c === a )
+      return true;
+}
+
+function makePrimeArray(numMax){
+	 var x = 0; // running total
+    for(var primeArray = [], k=2; k<=numMax;k++ ){
+    		if (check_prime(k)) primeArray.push(k);        
+    }
+    return primeArray;
+}
+
+function sumPrimes(num) {
+
+	var primesAry = makePrimeArray(num);
+	var runningTot = 0;
+	for (var i = 0; i < primesAry.length; i++) {
+		if (primesAry[i] <= num) {
+			runningTot += primesAry[i];
+				
+		} else {
+		// stop
+			num = runningTot;
+			return num;
+		}
+	}
+
+	
+   return runningTot;
+}
+
+
+document.getElementById("demo").innerHTML = 'sumPrimes(10) ... ' +  sumPrimes(10); // should return 17
+
+document.getElementById("demo2").innerHTML = 'sumPrimes(977) ... ' + sumPrimes(977); // should return 73156.
+
+ 
+</script>
+<pre class="prettyprint linenums" style="background: #F2F5FA">
+function check_prime(a)
+{
+   var c = 2;
+   for ( c = 2 ; c <= a - 1 ; c++ )
+   { 
+      if ( a % c === 0 )
+	   	return false;
+   }
+   if ( c === a )
+      return true;
+}
+
+function makePrimeArray(numMax){
+	 var x = 0; // running total
+    for(var primeArray = [], k=2; k<=numMax;k++ ){
+    		if (check_prime(k)) primeArray.push(k);        
+    }
+    return primeArray;
+}
+
+function sumPrimes(num) {
+
+	var primesAry = makePrimeArray(num);
+	var runningTot = 0;
+	for (var i = 0; i < primesAry.length; i++) {
+		if (primesAry[i] <= num) {
+			runningTot += primesAry[i];
+				
+		} else {
+		// stop
+			num = runningTot;
+			return num;
+		}
+	}
+	
+   return runningTot;
+}
+
+</pre>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+</body>
+
+
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body onload="prettyPrint()">
+<h3>Symmetric Difference</h3>
+Create a function that takes two or more arrays and returns an array of the 
+<a href="https://en.wikipedia.org/wiki/Symmetric_difference">symmetric difference</a>  of the provided arrays.
+
+<br/>
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<p id="demo5"></p>
+
+
+
+<script>
+
+
+function combineAry(previousArr, currentArr) {
+	// Return the difference of the arrays.
+	var tempAry = [];
+	var hs = {}; // initialise object
+	// hash[1] += 1
+	// hash  ==> Object {3: 5, 2: 1}
+	previousArr = previousArr.filter(function(elem, pos) {
+	  return previousArr.indexOf(elem) == pos;
+	});
+	currentArr = currentArr.filter(function(elem, pos) {
+	  return currentArr.indexOf(elem) == pos;
+	});
+
+	for (var i = 0; i < previousArr.length; i++) {
+		var idx = previousArr[i];
+		if( hs[parseInt(idx)] > 0) {
+	   	hs[parseInt(idx)] += 1;
+	   } else {
+	   	hs[parseInt(idx)] = 1;
+	   }
+	}
+	for (var j = 0; j < currentArr.length; j++) {
+	   if( hs[parseInt(currentArr[j])] > 0) {
+	   	hs[parseInt(currentArr[j])] += 1;
+	   } else {
+	   	hs[parseInt(currentArr[j])] = 1;
+	   }
+	
+	}
+
+	for (var key in hs) {
+   	if (hs[parseInt(key)] === 1) {
+		   tempAry.push(parseInt(key));
+   	}
+
+	}
+
+	return tempAry;
+	
+}
+
+
+function sym(args) {
+	var testAry = [];
+	testAry = Array.from(arguments).reduce(combineAry);
+
+		
+  return JSON.stringify(testAry);
+}
+
+
+
+document.getElementById("demo").innerHTML = sym([1, 2, 3], [5, 2, 1, 4]);
+							// should return [3, 4, 5] should contain only three elements.
+
+document.getElementById("demo2").innerHTML = sym([1, 2, 5], [2, 3, 5], [3, 4, 5]);
+						 	// should return [1, 4, 5] should contain only three elements.
+
+document.getElementById("demo3").innerHTML = sym([1, 1, 2, 5], [2, 2, 3, 5], [3, 4, 5, 5]);
+			 				// should return [1, 4, 5]. should contain only three elements.
+
+document.getElementById("demo4").innerHTML = sym([3, 3, 3, 2, 5], [2, 1, 5, 7], [3, 4, 6, 6], [1, 2, 3]);
+								// should return [2, 3, 4, 6, 7]. should contain only five elements.
+document.getElementById("demo5").innerHTML = sym([3, 3, 3, 2, 5], [2, 1, 5, 7], [3, 4, 6, 6], [1, 2, 3], [5, 3, 9, 8], [1]); 
+							 // should return [1, 2, 4, 5, 6, 7, 8, 9]. should contain only eight elements.
+
+ 
+</script>
+
+<pre class="prettyprint linenums">
+function combineAry(previousArr, currentArr) {
+	// Return the difference of the arrays.
+	var tempAry = [];
+	var hs = {}; // initialise object
+	// hash[1] += 1
+	// hash  ==> Object {3: 5, 2: 1}
+	previousArr = previousArr.filter(function(elem, pos) {
+	  return previousArr.indexOf(elem) == pos;
+	});
+	currentArr = currentArr.filter(function(elem, pos) {
+	  return currentArr.indexOf(elem) == pos;
+	});
+
+	for (var i = 0; i < previousArr.length; i++) {
+		var idx = previousArr[i];
+		if( hs[parseInt(idx)] > 0) {
+	   	hs[parseInt(idx)] += 1;
+	   } else {
+	   	hs[parseInt(idx)] = 1;
+	   }
+	}
+	for (var j = 0; j < currentArr.length; j++) {
+	   if( hs[parseInt(currentArr[j])] > 0) {
+	   	hs[parseInt(currentArr[j])] += 1;
+	   } else {
+	   	hs[parseInt(currentArr[j])] = 1;
+	   }
+	
+	}
+
+	for (var key in hs) {
+   	if (hs[parseInt(key)] === 1) {
+		   tempAry.push(parseInt(key));
+   	}
+
+	}
+
+	return tempAry;
+	
+}
+
+
+function sym(args) {
+	var testAry = [];
+	testAry = Array.from(arguments).reduce(combineAry);
+
+		
+  return (testAry);
+}
+</pre>
+<a href="https://github.com/google/code-prettify/blob/master/docs/getting_started.md">code presented in google-code-prettify</a>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+</body>
+
+
+</html>

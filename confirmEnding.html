@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background: #F0F1F2">
+<h3>Confirm ending.</h3>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+function confirmEnding(str, target) {
+
+	var stringLen = str.length;
+
+	var findPos = str.lastIndexOf(target);
+	// if it doesn't exist it's -1 and false	
+	if (findPos < 0) { return false;
+	} else {
+		if (findPos + target.length == stringLen)
+			return true;
+			else {
+				return false;
+			}	
+	}
+ 	
+  return str;
+}
+
+document.getElementById("demo").innerHTML = confirmEnding("Bastian", "n");;
+document.getElementById("demo2").innerHTML = confirmEnding("Connor", "n");
+document.getElementById("demo3").innerHTML = confirmEnding("He has to give me a new name", "na");
+document.getElementById("demo4").innerHTML = confirmEnding("If you want to save our world, you must hurry. We dont know how much longer we can withstand the nothing", "mountain");
+</script>
+
+<pre style="background: #fff; width: 400px; border: 2px solid darkgreen; padding: 5px">
+function titleCase(str) {
+  var strArr = str.split(' ');
+  if (strArr.length > 1) {
+     for (i = 0; i < strArr.length; i++) {
+         var s = strArr[i].toLowerCase();
+         var schars = s.split('');
+         for (j = 0; j < schars.length; j++) {
+             schars[j] = schars[j].toLowerCase();
+         }
+         schars[0] = schars[0].toUpperCase();
+         s= schars.join('');
+         strArr[i] = s;
+     }
+    
+  }
+    
+      return strArr.join(' ');
+}
+</pre>
+</body>
+
+
+</html>

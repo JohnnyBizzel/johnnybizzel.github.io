@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body>
+<h3>Spinal Case.</h3>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<p id="demo5"></p>
+
+<script>
+function reverse(s) {
+  var o = '';
+  for (var i = s.length - 1; i >= 0; i--)
+    o += s[i];
+  return o;
+}
+
+function spinalCase(str) { 
+
+
+	str = str.replace(/ /g, "-");
+ 	
+  
+  // Break up camel case
+  var testedChars = 0;
+  var i = str.length - 1;
+  var lastCode;
+  var newStr = "";
+  while (str.length > testedChars) {
+		// test case of the first char
+		var patt = /[A-Z]/;
+		if (patt.test(str[i])) {
+		   newStr += str[i].toLowerCase() + "-";
+		} else {
+			newStr += str[i];
+		}
+
+  		//.. var code = document.characterCode.character.value.charCodeAt(0);
+
+  		i--;
+  		testedChars++;	
+  }
+
+		
+		
+  
+  var strAry = reverse(newStr).toLowerCase().replace(/_/g, " ").split(' ');
+
+  // get rid of first '-' of the first word
+	if (strAry[0][0] == '-')  strAry[0] = strAry[0].substring(1);
+
+	
+  var returnArr = [];
+  
+  for (var i = 0; i < strAry.length; i++) {
+		strAry[i] = strAry[i].replace(/ /g, "-");
+ 		strAry[i] = strAry[i].replace(/--/g, "-");
+	   
+	   returnArr.push(strAry[i]);
+		
+  }
+
+   returnArr = returnArr.join('');
+  
+  return JSON.stringify(returnArr);
+}
+ 
+
+
+document.getElementById("demo").innerHTML = "This Is Spinal Tap --> " + spinalCase("This Is Spinal Tap");
+  // should return this-is-spinal-tap.
+document.getElementById("demo2").innerHTML = "thisIsSpinalTap --> " + spinalCase("thisIsSpinalTap");
+ // should return  this-is-spinal-tap.
+ 
+document.getElementById("demo3").innerHTML = "The_Andy_Griffith_Show --> " + spinalCase("The_Andy_Griffith_Show");
+ // return the-andy-griffith-show
+ document.getElementById("demo4").innerHTML = "Teletubbies say Eh-oh --> " +  spinalCase("Teletubbies say Eh-oh");
+ // return teletubbies-say-eh-oh
+
+document.getElementById("demo5").innerHTML = "AllThe-small Things --> " + spinalCase("AllThe-small Things");
+ 	//  should return all-the-small-things
+  
+</script>
+
+
+<pre class="prettyprint linenums" style="background: #FBF9FD">
+function reverse(s) {
+  var o = '';
+  for (var i = s.length - 1; i >= 0; i--)
+    o += s[i];
+  return o;
+}
+
+function spinalCase(str) { 
+  str = str.replace(/ /g, "-");
+  
+  // Break up camel case
+  var testedChars = 0;
+  var i = str.length - 1;
+  var lastCode;
+  var newStr = "";
+  while (str.length > testedChars) {
+		// test case of the first char
+	var patt = /[A-Z]/;
+	if (patt.test(str[i])) {
+	   newStr += str[i].toLowerCase() + "-";
+	} else {
+		newStr += str[i];
+	}
+
+  	//.. var code = document.characterCode.character.value.charCodeAt(0);
+  	i--;
+  	testedChars++;	
+  }
+  
+  var strAry = reverse(newStr).toLowerCase().replace(/_/g, " ").split(' ');
+
+  // get rid of first '-' of the first word
+	if (strAry[0][0] == '-')  strAry[0] = strAry[0].substring(1);
+	
+  var returnArr = [];
+  
+  for (var i = 0; i < strAry.length; i++) {
+	strAry[i] = strAry[i].replace(/ /g, "-");
+ 	strAry[i] = strAry[i].replace(/--/g, "-");
+	returnArr.push(strAry[i]);	
+  }
+  
+  return returnArr.join('');
+}
+</pre>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+</body>
+
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+
+<title>Advanced AJAX Part 4</title>
+
+<script language="javascript"  type="text/javascript">
+
+
+function doHttpRequest() {  // This function does the AJAX request
+  http.open("GET", "/ajax-content.html", true);
+  http.onreadystatechange = getHttpRes;
+  http.send(null);
+}
+
+function doHttpRequest2() {  // This function does the AJAX request
+http.open("GET", "/ajax-form.php?txt1="+document.getElementById('txt1').value, true);
+  http.onreadystatechange = getHttpRes;
+  http.send(null);
+}
+
+function getHttpRes() {
+  if (http.readyState == 4) { 
+    res = http.responseText;  // These following lines get the response and update the page
+    document.getElementById('div1').innerHTML = res;	
+  }
+}
+
+function getXHTTP() {
+  var xhttp;
+   try {   // The following "try" blocks get the XMLHTTP object for various browsers…
+      xhttp = new ActiveXObject("Msxml2.XMLHTTP");
+    } catch (e) {
+      try {
+        xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      } catch (e2) {
+ 		 // This block handles Mozilla/Firefox browsers...
+	    try {
+	      xhttp = new XMLHttpRequest();
+	    } catch (e3) {
+	      xhttp = false;
+	    }
+      }
+    }
+  return xhttp; // Return the XMLHTTP object
+}
+
+var http = getXHTTP(); // This executes when the page first loads.
+
+</script>
+
+</head>
+
+<body>
+
+<input type="button" value="Press for AJAX" name="btn" onClick="doHttpRequest();" >
+
+<br><br>
+
+<div id="div1"> <h3> Dynamic AJAX will be displayed here. </h3>  </div>
+
+</body>
+</html>
+

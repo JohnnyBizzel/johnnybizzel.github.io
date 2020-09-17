@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background-color : silver">
+<h3>Friendly Date Ranges</h3>
+Convert a date range consisting of two dates formatted as YYYY-MM-DD into a more readable (American style) format.
+
+EG) if the date range ends in less than a year from when it begins, do not display the ending year.
+<br/>
+
+Do not display information that is redundant or that can be inferred by the user: if the date range ends in less than a year from when it begins, do not display the ending year.
+year.
+<br/>
+Additionally, if the date range begins in the current year (i.e. it is currently the year 2016) and ends within one year, the year should not be displayed at the beginning of the friendly range.
+year.
+<br/>
+If the range ends in the same month that it begins, do not display the ending year or month.
+year.
+<br/>
+<p id="demo"></p>
+<p id="demo1"></p>
+<p id="demo2"></p>
+<p id="demo3"></p>
+<p id="demo4"></p>
+<p id="demo5"></p>
+<p id="demo6"></p>
+
+<script>
+// Add function to work out Julian date
+Date.prototype.getJulian = function() {
+    return Math.floor((this / 86400000) - (this.getTimezoneOffset()/1440) + 2440587.5);
+};
+
+
+
+
+// Resolve the day correctly
+function formatDay(dayVal) {
+  var day = dayVal.split('');
+  switch(dayVal) {
+	case "01":	dayVal = "1st";
+		break;
+	case "02":	dayVal = "2nd";
+		break;
+	case "03":	dayVal = "3rd";
+		break;
+	case "21" : dayVal = "21st";
+		break;
+	case "22" : dayVal = "22nd";
+		break;
+	case "23" : dayVal = "23rd";
+		break;
+	case "04":
+	case "05":
+	case "06":
+	case "07":
+	case "08":
+	case "09":
+	case "10":
+	case "11":
+	case "12":
+	case "13":
+	case "14":
+	case "15":
+	case "16":
+	case "17":
+	case "18":
+	case "19":
+	case "20":
+	case "24":	
+	case "25":
+	case "26":
+	case "27":
+	case "28":
+	case "29":
+	case "30":
+		dayVal = (day[0] === "0" ? '' : day[0]) + day[1] + "th";
+		break;
+  }
+  return dayVal;  
+}
+
+// Resolve the month
+function formatMonth(monthVal) {
+
+	switch(monthVal) {
+  		case "01": monthVal = "January"; 
+  			break;
+  		case "02": monthVal = "February";
+  			break;
+  		case "03": monthVal ="March";
+  			break;
+  		case "04": monthVal = "April"; 
+  			break;
+  		case "05": monthVal = "May";
+  			break;  		
+  		case "06": monthVal = "June"; 
+  			break;  		
+  		case "07": monthVal = "July";
+  			break;
+  		case "08": monthVal = "August"; 
+  			break;
+  		case "09": monthVal = "September"; 
+  			break;
+  		case "10": monthVal = "October";
+  			break;  		
+  		case "11": monthVal = "November"; 
+  			break;  
+  		case "12": monthVal = "December";
+  			break;  	
+  }
+	return monthVal;
+	
+}
+
+function makeFriendlyDates(arr) {
+  
+	var dtBegin = arr[0].split('-');
+  	var dtEnd = arr[1].split('-');
+  
+	var dtBegYr = dtBegin[0];
+  	var dtBegMn = dtBegin[1];
+  	var dtBegDy = dtBegin[2];
+  
+  	var dtEndYr = dtEnd[0];
+  	var dtEndMn = dtEnd[1];
+  	var dtEndDy = dtEnd[2];
+  
+  	// Work out Julian dates:
+	var dateBegin = new Date(arr[0]);
+  	var dateEnd = new Date(arr[1]);
+ 
+  	var julianBeg = dateBegin.getJulian();
+  	var julianEnd = dateEnd.getJulian();
+
+
+  	var yr = parseInt(dtBegYr);
+  	var thisYr = new Date().getFullYear();
+  
+  var begYearFormatted = '';
+  	if (yr === thisYr && (julianEnd - julianBeg < 365)) {
+		begYearFormatted = '';
+  	} else {
+  		begYearFormatted = ", " + dtBegYr;
+  	}
+  	// Create final array for presenting the start and end date pair
+  	var retAry = [];
+  
+  	// Push the starting date to the array
+  	retAry.push(formatMonth(dtBegMn) + ' ' + formatDay(dtBegDy) + begYearFormatted);
+
+
+  	// Work out what is needed for the 2nd date and add it to the array
+  	
+	// Excluding cases where day is the same 
+	if (arr[0] !== arr[1]) {
+	
+		// if same month and year, show only the date
+		var endDateFormat = '';
+		if (dtBegYr === dtEndYr && parseInt(dtBegMn) === parseInt(dtEndMn)) {
+			endDateFormat = formatDay(dtEndDy); 
+		} else if (julianEnd - julianBeg < 365) {
+			// Check julian date range, if less than a year, don't display the year - see demo 5
+			endDateFormat = formatMonth(dtEndMn) + ' ' + formatDay(dtEndDy);
+		} else {
+			yr = parseInt(dtEndYr);
+			if (yr === thisYr) {
+				dtEndYr = '';
+	  		} else {
+	  			dtEndYr = ", " + dtEndYr;
+	  		}
+			endDateFormat = formatMonth(dtEndMn) + ' ' + formatDay(dtEndDy) + dtEndYr;
+	
+	   
+		} 	
+		retAry.push(endDateFormat);
+	}  
+   
+  
+  
+  	return JSON.stringify(retAry);
+}
+
+document.getElementById("demo").innerHTML = 
+	'["2016-07-01", "2016-07-04"]  => ' + makeFriendlyDates(["2016-07-01", "2016-07-04"]); // should return ["July 1st","4th"].
+
+
+document.getElementById("demo2").innerHTML =
+	'["2016-12-01", "2017-02-03"] => ' + makeFriendlyDates(["2016-12-01", "2017-02-03"]); // should return ["December 1st","February 3rd"]
+
+document.getElementById("demo3").innerHTML =
+	'["2016-12-01", "2018-02-03"]  => ' + makeFriendlyDates(["2016-12-01", "2018-02-03"]); // should return ["December 1st, 2016","February 3rd, 2018"].
+
+document.getElementById("demo4").innerHTML = 
+	'["2017-03-01", "2017-05-05"] => ' + makeFriendlyDates(["2017-03-01", "2017-05-05"]); // should return ["March 1st, 2017","May 5th"]
+
+document.getElementById("demo5").innerHTML =
+	'["2022-09-05", "2023-09-04"] => ' +  makeFriendlyDates(["2022-09-05", "2023-09-04"]); // should return ["September 5th, 2022","September 4th"].
+
+document.getElementById("demo6").innerHTML =
+	'["1975-11-22", "1975-12-21"] => ' +  makeFriendlyDates(["1975-11-22", "1975-12-21"]); // should return ["November 22nd, 1975","December 21st"].
+
+ 
+</script>
+<pre class="prettyprint linenums" style="background-color: #e6e9e6">
+// Add function to work out Julian date
+Date.prototype.getJulian = function() {
+    return Math.floor((this / 86400000) - (this.getTimezoneOffset()/1440) + 2440587.5);
+};
+
+// Resolve the day correctly
+function formatDay(dayVal) {
+  var day = dayVal.split('');
+  switch(dayVal) {
+	case "01":	dayVal = "1st";
+		break;
+	case "02":	dayVal = "2nd";
+		break;
+	case "03":	dayVal = "3rd";
+		break;
+	case "21" : dayVal = "21st";
+		break;
+	case "22" : dayVal = "22nd";
+		break;
+	case "23" : dayVal = "23rd";
+		break;
+	case "04":
+	case "05":
+	case "06":
+	case "07":
+	case "08":
+	case "09":
+	case "10":
+	case "11":
+	case "12":
+	case "13":
+	case "14":
+	case "15":
+	case "16":
+	case "17":
+	case "18":
+	case "19":
+	case "20":
+	case "24":	
+	case "25":
+	case "26":
+	case "27":
+	case "28":
+	case "29":
+	case "30":
+		dayVal = (day[0] === "0" ? '' : day[0]) + day[1] + "th";
+		break;
+  }
+  return dayVal;  
+}
+
+// Resolve the month
+function formatMonth(monthVal) {
+
+	switch(monthVal) {
+  		case "01": monthVal = "January"; 
+  			break;
+  		case "02": monthVal = "February";
+  			break;
+  		case "03": monthVal ="March";
+  			break;
+  		case "04": monthVal = "April"; 
+  			break;
+  		case "05": monthVal = "May";
+  			break;  		
+  		case "06": monthVal = "June"; 
+  			break;  		
+  		case "07": monthVal = "July";
+  			break;
+  		case "08": monthVal = "August"; 
+  			break;
+  		case "09": monthVal = "September"; 
+  			break;
+  		case "10": monthVal = "October";
+  			break;  		
+  		case "11": monthVal = "November"; 
+  			break;  
+  		case "12": monthVal = "December";
+  			break;  	
+  }
+	return monthVal;
+}
+
+function makeFriendlyDates(arr) {
+  
+	var dtBegin = arr[0].split('-');
+  	var dtEnd = arr[1].split('-');
+  
+	var dtBegYr = dtBegin[0];
+  	var dtBegMn = dtBegin[1];
+  	var dtBegDy = dtBegin[2];
+  
+  	var dtEndYr = dtEnd[0];
+  	var dtEndMn = dtEnd[1];
+  	var dtEndDy = dtEnd[2];
+  
+  	// Work out Julian dates:
+	var dateBegin = new Date(arr[0]);
+  	var dateEnd = new Date(arr[1]);
+ 
+  	var julianBeg = dateBegin.getJulian();
+  	var julianEnd = dateEnd.getJulian();
+
+
+  	var yr = parseInt(dtBegYr);
+  	var thisYr = new Date().getFullYear();
+  
+	var begYearFormatted = '';
+  	if (yr === thisYr && (julianEnd - julianBeg < 365)) {
+		begYearFormatted = '';
+  	} else {
+  		begYearFormatted = ", " + dtBegYr;
+  	}
+  	// Create final array for presenting the start and end date pair
+  	var retAry = [];
+  
+  	// Push the starting date to the array
+  	retAry.push(formatMonth(dtBegMn) + ' ' + formatDay(dtBegDy) + begYearFormatted);
+
+
+  	// Work out what is needed for the 2nd date and add it to the array
+  	
+	// Excluding cases where day is the same 
+	if (arr[0] !== arr[1]) {
+	
+		// if same month and year, show only the date
+		var endDateFormat = '';
+		if (dtBegYr === dtEndYr && parseInt(dtBegMn) === parseInt(dtEndMn)) {
+			endDateFormat = formatDay(dtEndDy); 
+		} else if (julianEnd - julianBeg < 365) {
+			// Check julian date range, if less than a year, don't display the year - see demo 5
+			endDateFormat = formatMonth(dtEndMn) + ' ' + formatDay(dtEndDy);
+		} else {
+			yr = parseInt(dtEndYr);
+			if (yr === thisYr) {
+				dtEndYr = '';
+	  		} else {
+	  			dtEndYr = ", " + dtEndYr;
+	  		}
+			endDateFormat = formatMonth(dtEndMn) + ' ' + formatDay(dtEndDy) + dtEndYr;
+	
+	   
+		} 	
+		retAry.push(endDateFormat);
+	}  
+  
+  	return (retAry);
+}
+</pre>
+<a href="https://github.com/google/code-prettify/blob/master/docs/getting_started.md">code presented in google-code-prettify</a>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+</body>
+
+
+</html>

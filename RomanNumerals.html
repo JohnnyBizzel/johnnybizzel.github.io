@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link  rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body style="background: #EAB92D">
+<h3>Convert to Roman Numerals</h3>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function convertToRoman(int) {
+
+    // create 2-dimensional array, each inner array containing 
+    // roman numeral representations of 1-9 in each respective 
+    // place (ones, tens, hundreds, etc...currently this handles
+    // integers from 1-3999, but could be easily extended)
+    var romanNumerals = [
+        ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"], // ones
+        ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"], // tens
+        ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"], // hundreds
+        ["", "M", "MM", "MMM"] // thousands
+    ];
+
+    // split integer string into array and reverse array
+    var intArr = int.toString().split('').reverse(),
+        len = intArr.length,
+        romanNumeral = '',
+        i = len;
+
+    // starting with the highest place (for 3046, it would be the thousands 
+    // place, or 3), get the roman numeral representation for that place 
+    // and append it to the final roman numeral string
+    while (i--) {
+        romanNumeral += romanNumerals[ i ][ intArr[i] ];
+    }
+
+    return romanNumeral;
+    
+}
+
+
+ 
+
+document.getElementById("demo").innerHTML = "2 = " +  convertToRoman(2);  // should return "II"	    
+document.getElementById("demo2").innerHTML = "501 = " +  convertToRoman(501);  // DI
+document.getElementById("demo3").innerHTML = "891 = " +  convertToRoman(891); // should return DCCCXCI
+document.getElementById("demo4").innerHTML = "3999 = " +  convertToRoman(3999); // MMMCMXCIX
+
+</script>
+<pre class="prettyprint linenums" style="background: #EBE9AD; width: 50em;">
+function convertToRoman(int) {
+
+    // create 2-dimensional array, each inner array containing 
+    // roman numeral representations of 1-9 in each respective 
+    // place (ones, tens, hundreds, etc...currently this handles
+    // integers from 1-3999, but could be easily extended)
+    var romanNumerals = [
+        ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"], // ones
+        ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"], // tens
+        ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"], // hundreds
+        ["", "M", "MM", "MMM"] // thousands
+    ];
+
+    // split integer string into array and reverse array
+    var intArr = int.toString().split('').reverse(),
+        len = intArr.length,
+        romanNumeral = '',
+        i = len;
+
+    // starting with the highest place (for 3046, it would be the thousands 
+    // place, or 3), get the roman numeral representation for that place 
+    // and append it to the final roman numeral string
+    while (i--) {
+        romanNumeral += romanNumerals[ i ][ intArr[i] ];
+    }
+
+    return romanNumeral;
+    
+}
+</pre>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+</body>
+</html>

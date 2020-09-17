@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<title>MET Office UK Weather</title>
+ <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+<style type="text/css">
+.flexcontainer {
+	display: flex;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  
+}
+img {
+	height: 150px;
+	width: 150px;
+}
+
+.margin-sm {
+	margin: 10px
+}
+
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+#map {
+  height: 330px;
+}
+#suggestions { position: absolute; border: 1px solid #CBD3DD; background: #FFF; }
+#suggestions.hide { display: none;}
+.autocomplete-suggestion { overflow: hidden; padding: 5px 15px; white-space: nowrap; }
+</style>
+    
+</head>
+<body>
+
+<div class="container-fluid">
+<div class="row">
+
+<h1><img src="images/mo_print_logo.gif" style="width:250px; height:67px"> Weather for the UK</h1>
+
+
+<section class="col-xs-12 col-sm-6 col-md-4">
+<label for="ipLocation">Internet Location: </label><div class="h2" id="ipLocation"></div>
+	<div class="form-group well">
+		<label for="testLat">Lat:</label>
+		<br/>
+		<input type="text" id="testLat" />
+		<br/>
+		<label for="testLong">Long:</label>
+		<br/>
+		<input type="text" id="testLong" />
+		<br/>
+		<label for="place">Place:</label><br/>
+		<input type="text" id="place" />
+		
+		<button class="btn btn-default pull-right" id="getWeather">Get Weather</button>
+		<br/>
+	<div id="suggestions"></div>
+	</div>
+</section>
+<div id="map" class="col-xs-12 col-sm-6 col-md-6">
+
+
+</div>
+</div>
+<p id="root">This weather app picks up your current location from your internet address but you can search for any place by clicking on the map. <span class="text-danger"> For the report press "Get Weather"</span></p>
+<h3>The nearest weather station:</h3>
+<p id="local" class="h3">press get weather above...</p>
+</div>
+<div class="container">
+	<div class="row flexcontainer">
+		<!-- today and next 4 days -->
+		<div id="day1" class="margin-sm text-center">
+			<strong>Today</strong>
+			<br/>
+			<div id="dt1"></div>
+			<br/>
+			<img id="img1" class="img-responsive img-rounded" src="images/clear.png">
+			<br/>
+			<p id="desc1"></p>
+			<br/>
+			<span id="temp1">00</span>
+		</div>
+		<div id="day2" class="margin-sm text-center">
+		<strong>Tomorrow</strong>
+			<br/>
+			<div id="dt2"></div>
+			<br/>
+			<img id="img2" class="img-responsive img-rounded" src="images/partly-cloudy.png">
+			<br/>
+			<p id="desc2"></p>
+			<br/>
+			<span id="temp2">00</span>
+		</div>
+		<div id="day3" class="margin-sm text-center">
+		<strong>Day 3</strong>
+			<br/>
+			<div id="dt3"></div>			
+			<br/>
+			<img id="img3" class="img-responsive img-rounded" src="images/sleet.png">
+			<br/>
+			<p id="desc3"></p>
+			<br/>			
+			<span id="temp3">00</span>
+		</div>
+		<div id="day4" class="margin-sm text-center">
+		<strong>Day 4</strong>
+			<br/>
+			<div id="dt4"></div>
+			<br/>
+			<img id="img4" class="img-responsive img-rounded" src="images/rain.png">
+			<br/>
+			<p id="desc4"></p>
+			<br/>			
+			<span id="temp4">00</span>
+		</div>
+	
+	
+	</div>
+	<div class="row flexcontainer">
+	
+		<!-- night values and next 4 days -->
+		<div id="day1n" class="margin-sm text-center">
+			<strong>Tonight</strong>
+			<br/>
+			<div id="dt1n"></div>
+			<br/>
+			<img id="img1n" class="img-responsive img-rounded" src="images/wind.png">
+			<br/>
+			<p id="desc1n"></p>
+			<br/>
+			<span id="temp1n">00</span>
+		</div>
+		<div id="day2n" class="margin-sm text-center">
+		<strong>Tomorrow night</strong>
+			<br/>
+			<div id="dt2n"></div>
+			<br/>
+			<img id="img2n"  class="img-responsive img-rounded" src="images/wind.png">
+			<br/>
+			<p id="desc2n"></p>
+			<br/>
+			<span id="temp2n">00</span>
+		</div>
+		<div id="day3n" class="margin-sm text-center">
+			<strong>Night 3</strong>
+			<br/>
+			<div id="dt3n"></div>
+			<br/>
+			<img id="img3n" class="img-responsive img-rounded" src="images/wind.png">
+			<br/>
+			<p id="desc3n"></p>
+			<br/>			
+			<span id="temp3n">00</span>
+		</div>
+		<div id="day4n" class="margin-sm text-center">
+		<strong>Night 4</strong>
+			<br/>
+			<div id="dt4n"></div>
+			<br/>
+			<img id="img4n" class="img-responsive img-rounded" src="images/wind.png">
+			<br/>
+			<p id="desc4n"></p>
+			<br/>			
+			<span id="temp4n">00</span>
+		</div>
+	
+	
+	</div>	
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script>
+ 
+function getWeatherReport (startingLat, startingLong) {
+	
+		   nearestValue = 10000;
+			
+
+			$.getJSON("METsitelist.json",{},  function(json) {
+
+			    	// elevation
+			    	// id
+			    	// latitude
+			    	// longitude
+			    	// region
+			    	// unitaryAuthArea
+			    	
+			    	// Work out nearest
+			    	for(var i=0; i< json.Locations.Location.length; i++) {
+			    		var idOfNearestStation = findNearest(startingLat, startingLong,
+			    															json.Locations.Location[i].latitude,
+			    															json.Locations.Location[i].longitude,
+			    															json.Locations.Location[i].id)
+			    	}
+			    	/*$('#local').html("ID nearest: "+ idOfNearestStation + '<br/>');*/
+			    	$.getJSON("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + idOfNearestStation + '?res=3hourly&key=3b40dfa1-885a-467d-bd87-609f1afa4c15', function (weatherJson) {
+			    		$('#local').text('');
+			    		var wthStn = weatherJson.SiteRep.DV.Location;
+			    		$('#place').val(wthStn.name);
+			    		// Work out correct period for weather for 12 pm
+			    		var rpt = 0; // index of today's weather report for 12pm.
+			    		if (wthStn.Period[0].Rep.length > 3) {
+			    			rpt = wthStn.Period[0].Rep.length - 4; 
+			    		}
+			    		$('#local').append(wthStn.name + ', '+ wthStn.country + '<br/>');
+			    		$('#local').append('Current weather: ' + wthStn.Period[0].Rep[0].T + '&deg; C, wind speed '+ wthStn.Period[0].Rep[0].S + ' <br/>');
+			    		$('#desc1').text(weatherDesc(wthStn.Period[0].Rep[rpt].W));			    		
+			    		$('#desc2').text(weatherDesc(wthStn.Period[1].Rep[4].W));
+			    		$('#desc3').text(weatherDesc(wthStn.Period[2].Rep[4].W));
+			    		$('#desc4').text(weatherDesc(wthStn.Period[3].Rep[4].W));
+			    		$('#dt1').text(wthStn.Period[0].value.replace(/Z/g, '')  + ' ' + wthStn.Period[0].Rep[rpt].$/60 + ':00');			    		
+			    		$('#dt2').text(wthStn.Period[1].value.replace(/Z/g, '')  + ' ' + wthStn.Period[1].Rep[4].$/60 + ':00');
+			    		$('#dt3').text(wthStn.Period[2].value.replace(/Z/g, '')  + ' ' + wthStn.Period[2].Rep[4].$/60 + ':00');
+			    		$('#dt4').text(wthStn.Period[3].value.replace(/Z/g, '')  + ' ' + wthStn.Period[3].Rep[4].$/60 + ':00');
+						$('#temp1').html(wthStn.Period[0].Rep[rpt].T + '&deg;C');
+			    		$('#temp2').html(wthStn.Period[1].Rep[4].T + '&deg;C');
+			    		$('#temp3').html(wthStn.Period[2].Rep[4].T + '&deg;C');
+			    		$('#temp4').html(wthStn.Period[3].Rep[4].T + '&deg;C');
+			    		$('#img1').attr("src", "images/" + weatherPicture(wthStn.Period[0].Rep[rpt].W) + ".png");
+			    		$('#img2').attr("src", "images/" + weatherPicture(wthStn.Period[1].Rep[4].W) + ".png");
+			    		$('#img3').attr("src", "images/" + weatherPicture(wthStn.Period[2].Rep[4].W) + ".png");
+			    		$('#img4').attr("src", "images/" + weatherPicture(wthStn.Period[3].Rep[4].W) + ".png");
+			    		// Night values
+			    		$('#desc1n').text(weatherDesc(wthStn.Period[1].Rep[0].W));			    		
+			    		$('#desc2n').text(weatherDesc(wthStn.Period[2].Rep[0].W));
+			    		$('#desc3n').text(weatherDesc(wthStn.Period[3].Rep[0].W));
+			    		$('#desc4n').text(weatherDesc(wthStn.Period[4].Rep[0].W));
+			    		$('#dt1n').text(wthStn.Period[1].value.replace(/Z/g, '') + ' ' + wthStn.Period[1].Rep[0].$/60 + ':00');			    		
+			    		$('#dt2n').text(wthStn.Period[2].value.replace(/Z/g, '') + ' ' + wthStn.Period[2].Rep[0].$/60 + ':00');
+			    		$('#dt3n').text(wthStn.Period[3].value.replace(/Z/g, '')  + ' ' + wthStn.Period[3].Rep[0].$/60 + ':00');
+			    		$('#dt4n').text(wthStn.Period[4].value.replace(/Z/g, '') + ' ' + wthStn.Period[4].Rep[0].$/60 + ':00');
+						$('#temp1n').html(wthStn.Period[1].Rep[0].T + '&deg;C');
+			    		$('#temp2n').html(wthStn.Period[2].Rep[0].T + '&deg;C');
+			    		$('#temp3n').html(wthStn.Period[3].Rep[0].T + '&deg;C');
+			    		$('#temp4n').html(wthStn.Period[4].Rep[0].T + '&deg;C');
+			    		$('#img1n').attr("src", "images/" + weatherPicture(wthStn.Period[1].Rep[0].W) + ".png");
+			    		$('#img2n').attr("src", "images/" + weatherPicture(wthStn.Period[2].Rep[0].W) + ".png");
+			    		$('#img3n').attr("src", "images/" + weatherPicture(wthStn.Period[3].Rep[0].W) + ".png");
+			    		$('#img4n').attr("src", "images/" + weatherPicture(wthStn.Period[4].Rep[0].W) + ".png");
+			    	});
+			});
+	
+} 
+ 	var map;
+   function initMap() {
+   
+   	var startLatlng = {lat: 54, lng: -4};  //new google.maps.LatLng(54,-4),
+	      var myOptions = {
+		    zoom: 5,
+		    center: startLatlng,
+		    mapTypeControl: true,
+		    mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+		    navigationControl: true,
+		    mapTypeId: google.maps.MapTypeId.ROADMAP,
+          styles: [{"featureType":"water","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#aee2e0"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#abce83"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":"#769E72"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#7B8758"}]},{"featureType":"poi","elementType":"labels.text.stroke","stylers":[{"color":"#EBF4A4"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"visibility":"simplified"},{"color":"#8dab68"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#5B5B3F"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ABCE83"}]},{"featureType":"road","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#A4C67D"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#9BBF72"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#EBF4A4"}]},{"featureType":"transit","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#87ae79"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#7f2200"},{"visibility":"off"}]},{"featureType":"administrative","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"},{"visibility":"on"},{"weight":4.1}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#495421"}]},{"featureType":"administrative.neighborhood","elementType":"labels","stylers":[{"visibility":"off"}]}]
+		  }
+        map = new google.maps.Map(document.getElementById('map'), myOptions);
+
+
+        map.addListener('click', function(e) {
+         // map.setZoom(8);
+         //map.setCenter(marker.getPosition());
+          placeMarkerAndPanTo(e.latLng, map, true); 
+
+        });
+   }
+   
+   var markerAry = [];
+   
+  function placeMarkerAndPanTo(latLng, map, clickedOnMap) {
+  		removeMarkers();
+	 	var marker = new google.maps.Marker({
+			position: latLng,
+	       map: map
+	   });
+	   markerAry.push(marker);
+		var coOrds = latLng;
+		$('#testLat').val(latLng.lat);
+		$('#testLong').val(latLng.lng);
+		if (clickedOnMap) $('#place').val('');
+	    
+	     map.panTo(latLng);
+   }
+      
+   function removeMarkers(){
+    for(i=0; i<markerAry.length; i++){
+        markerAry[i].setMap(null);
+    }
+	}
+
+
+var nearestValue = 10000;
+var nearestID = 0;
+function findNearest(startLat, startLon, lat,lon, testID) {
+		 
+		if (nearestValue > 9999) { // set initial value
+          nearestID = testID;
+			if ((startLat < 0 && lat < 0) || (startLat >= 0 && lat >= 0)) {
+				nearestValue = Math.abs((startLat) - (lat));				 			
+			} else {
+        nearestValue = (startLat - lat);
+      }
+    
+    	if ((startLon < 0 && lon < 0) || (startLon >= 0 && lon >= 0)) {
+				nearestValue += Math.abs((startLon) - (lon));				 			
+			} else {
+        nearestValue += (startLon - lon);
+              nearestID = testID;
+      }
+      
+      nearestValue = Math.abs(nearestValue); 
+        return (nearestValue);  
+			
+		} else {
+		    var currentVal = 0
+		  	if ((startLat < 0 && lat < 0) || (startLat >= 0 && lat >= 0)) {
+				  currentVal = Math.abs((startLat) - (lat));				 			
+			  } else {
+          currentVal = (startLat - lat);
+        }
+  
+      	if ((startLon < 0 && lon < 0) || (startLon >= 0 && lon >= 0)) {
+  				currentVal += Math.abs((startLon) - (lon));				 			
+  			} else if (startLon < 0 && lon >= 0) {
+          currentVal += Math.abs(startLon - lon);
+        } else { 
+          currentVal += startLon - lon;
+        }
+    
+          //var currentVal = Math.abs(startLat) - Math.abs(lat) + Math.abs(startLon) - Math.abs(lon);
+        if (nearestValue > Math.abs(currentVal)) {
+          nearestValue = Math.abs(currentVal);
+          nearestID = testID;
+        }
+    }
+    return (nearestID);
+}
+
+function weatherDesc(code) {
+	var desc = "";
+	switch(Number(code)) {	
+		case 0: 
+			desc = "Clear night";
+			break;
+		case 1: 
+			desc = "Sunny day";
+			break;
+		case 2:
+		case 3:
+			desc = "Partly cloudy";
+			break;
+		case 5:
+			desc = "Mist";
+			break;
+		case  6 :
+			desc = "Fog";
+			break;
+		case  7 :
+			desc = "Cloudy";
+			break;
+		case  8:
+			desc = "Overcast";
+			break;
+		case  9:
+		case 10 :
+			desc = "Light rain shower";
+			break;
+		case  11:
+			desc = "Drizzle";
+			break;
+		case  12 :
+			desc = "Light rain";
+			break;
+		case  13:
+		case  14:
+			desc = "Heavy rain shower";
+			break;
+		case  15:
+			desc = "Heavy rain";
+			break;
+		case  16:
+		case 17:
+			desc = "Sleet shower";
+			break;
+		case  18: 
+			desc = "Sleet";
+			break;
+		case  19:
+		case 20:
+			desc = "Hail shower";
+			break;
+		case 21: 
+			desc = "Hail";
+			break;
+		case 22:
+		case 23: 
+			desc = "Light snow shower";
+			break;
+		case 24:
+			desc = "Light snow";
+			break;
+		case  25:
+		case  26 :
+			desc = "Heavy snow shower";
+			break;
+		case  27:
+			desc = "Heavy snow";
+			break;				
+		case  28:
+		case 29: 
+			desc = "Thunder shower";
+			break;				
+		case  30:
+			desc = "Thunder";
+			break;				
+		default:
+			desc = "weather unknown" 																					
+	}
+	return desc;
+}
+
+function weatherPicture(code) {
+	var image = "";
+	switch(Number(code)) {	
+		case 0: 
+			// "Clear night";
+			image = "clear-night";
+			break;
+		case 1: 
+			// "Sunny day";
+			image = "clear";
+			break;
+		case 2:
+		case 3:
+			// "Partly cloudy";
+			image = "partly-cloudy";
+			break;
+		case 5:
+		case 6:		
+			// 5 "Mist";
+			// 6 "Fog";
+			image = "fog";	
+			break;
+		case  7 :
+		case  8:
+			// 7 "Cloudy";
+			// 8 "Overcast";
+			image = "cloudy";
+		break;
+		case  9:
+		case 10 :
+		case 11 :
+			// 9,10 "Light rain shower";
+			// 11 "Drizzle";
+			image = "scattered-showers";
+			break;		
+		case  12 :
+			// "Light rain";
+			image = "cloudy-scattered-showers";
+			break;
+		case  13:
+		case  14:
+		case  15:
+			// 13,14 = "Heavy rain shower";
+			// 15 = "Heavy rain";
+			image = "rain";
+			break;
+		case 16:
+		case 17:
+			// "Sleet shower";
+		case  18: 
+			// "Sleet";
+		case  19:
+		case 20:
+			// desc = "Hail shower";
+		case 21: 
+			// desc = "Hail";
+			image = "sleet";
+			break;
+		case 22:
+		case 23: 
+			//desc = "Light snow shower";
+		case 24:
+			//desc = "Light snow";
+		case  25:
+		case  26:
+			//desc = "Heavy snow shower";	
+		case  27:
+			//desc = "Heavy snow";
+			image = "snow";
+			break;				
+		case  28:
+		case 29: 
+			// desc = "Thunder shower";		
+		case  30:
+			// desc = "Thunder";
+			image = "thunderstorm";
+			break;				
+		default:
+			desc = "weather unknown" 																					
+	}
+	return image;
+}
+
+
+function placeInput(id, plName, lat, lng) {
+	console.log(id);
+	console.log(plName);
+   $('#place').text(plName);
+   $('#testLat').val(lat);
+   $('#testLong').val(lng);
+   var latLng = { "lat": lat, "lng": lng };
+   placeMarkerAndPanTo(latLng, map,false); 
+}
+
+  $(document).ready(function() {
+  
+
+  	var startingLat = 0;
+	var startingLong = 0;
+  /* Free for 1000 accesses per day (get IP address) */
+  	$.getJSON("https://ipapi.co/json", function(ipjson) {
+  		startingLat = ipjson.latitude;
+  		startingLong = ipjson.longitude;
+  		$('#testLat').val(startingLat);
+  		$('#testLong').val(startingLong);
+  		$('#ipLocation').text(ipjson.city);
+  		//$.getJSON("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/capabilities?res=hourly&key=3b40dfa1-885a-467d-bd87-609f1afa4c15", function (timePeriods) {
+//			$('#capability').html("<pre>" + JSON.stringify(timePeriods) + "</pre>");				
+//		}); 
+  		
+  	});	
+  	
+  	var siteList = {};
+  	$.getJSON("METsitelist.json",{},  function(json) {
+  		siteList = json.Locations.Location.map(function(obj){
+			var rObj = {};
+   		rObj.id = obj.id;
+   		rObj.name = obj.name;
+   		rObj.latitude = obj.latitude;
+   		rObj.longitude = obj.longitude;
+   		//$('#suggestions').append("<div><span class='siteSugg' onclick id='site-"+ rObj.id + "'>" + rObj.name + "</span></div>");
+   		return rObj;
+  		});
+  	 }); 		
+
+  	// TODO: Map click - get weather
+		
+		$('#place').keyup(function() {
+			$('#suggestions').html('');
+			if ($('#place').val().length > 2) {
+				$('#suggestions').css("display", "block");
+				var searchVal = $('#place').val();
+				// start search
+			
+					var filtered = siteList.filter(function (el) {
+						el.name = el.name.toUpperCase();
+						return el.name.includes(searchVal.toUpperCase());
+					});
+					// for each found...
+					for(var i=0; i < filtered.length; i++) {
+
+						$('#suggestions').append("<div><span class='siteSugg' onclick='placeInput(" + filtered[i].id 
+							+ ",&apos;" + filtered[i].name +"&apos; , "+ filtered[i].latitude + "," + filtered[i].longitude
+							+")' id='site-"+ filtered[i].id + "'>" + filtered[i].name + "</span></div>");			    		
+			    	}
+			    	if(filtered.length === 0) {
+			    		$('#suggestions').html("<div class='text-danger'>No locations found</div>");
+			    	} 							
+				
+							
+			} else {
+				$('#suggestions').css("display", "none");
+			}
+
+		});
+		
+		
+  		    
+		$('#getWeather').click(function () {
+			$('#suggestions').html('');
+			startingLat = $('#testLat').val();
+			startingLong = $('#testLong').val();
+			getWeatherReport(startingLat, startingLong);
+		
+		});
+		
+		
+		
+	});
+
+
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeyLL6nI_icVkUiQCym9gbBzm_0vsna4s&callback=initMap"
+    ></script>
+    
+</body>
+</html>

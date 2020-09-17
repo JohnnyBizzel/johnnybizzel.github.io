@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body>
+<br/>
+<h2>Convert entities.</h2>
+<br/>
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function convertHTML(str) { 
+  // Break it up.
+  var strAry = str.split(' ');
+
+    
+  var returnArr = [];
+  for (var i = 0; i < strAry.length; i++) {
+			strAry[i] = strAry[i].replace(/&/g, "&amp;");
+ 			strAry[i] = strAry[i].replace(/>/g, "&gt;");
+ 			strAry[i] = strAry[i].replace(/</g, "&lt;");
+	      strAry[i] = strAry[i].replace(/"/g, "&quot;");
+  			strAry[i] = strAry[i].replace(/'/g, "&apos;");
+	      
+	      returnArr.push(strAry[i]);
+  }
+
+   returnArr = returnArr.join(' ');
+  
+  return JSON.stringify(returnArr);
+}
+
+
+
+document.getElementById("demo").innerHTML = convertHTML("Dolce & Gabbana");
+  // should return Dolce &​amp; Gabbana.
+document.getElementById("demo2").innerHTML = convertHTML("Hamburgers < Pizza < Tacos")
+ // should return Hamburgers &​lt; Pizza &​lt; Tacos.
+ 
+document.getElementById("demo3").innerHTML = convertHTML('Stuff in "quotation marks"');
+ // return Stuff in &​quot;quotation marks&​quot;
+
+document.getElementById("demo4").innerHTML = convertHTML("Pete's Dragon");
+ 	//  should return Pete&​apos;s Dragon
+  
+</script>
+<br/><br/>
+<pre style="background: #EBEBCD; width: 158px;">
+VIEW SOURCE!!
+</pre>
+
+</body>
+
+</html>

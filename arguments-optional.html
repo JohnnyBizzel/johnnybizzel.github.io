@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background-color: #e0e0ea">
+<h3>arguments optional</h3>
+Create a function that sums two arguments together. 
+If only one argument is provided, then return a function that expects one argument and returns the sum.
+
+<p id="demo">addTogether(2,3);  ==> </p>
+
+<p id="demo2">addTogether(2)(3); ==> </p>
+
+<p id="demo3">addTogether("http://bit.ly/IqT6zt"); ==> </p>
+
+<p id="demo4">addTogether(2, "3"); ==> </p>
+
+<p id="demo5">addTogether(2)([3]); ==> </p>
+<pre class="prettyprint linenums">
+function addTwo(c,d) {
+    return c + d;
+}
+
+function addOne(a) {
+	return function(b) {
+  	  	var a2 = Array.isArray(b);
+	  	if (a2) {
+		  	var undef;
+	  		return undef ;
+	  	} else {
+	  	// not array
+	  		return a + b;
+	  	}
+    
+  	};
+}
+
+function addTogether() {
+	if (arguments.length===1 && typeof(arguments[0])==='number' ){
+		    return addOne(arguments[0]);	   
+	}
+	
+	if (arguments.length===2) {
+		if(typeof(arguments[0])==='number' && typeof(arguments[1])==='number' ){
+	  		var a2 = Array.isArray(arguments[1]);
+	  		if (a2) {
+	  			var undef;
+	  			return undef ;
+	  		} else {
+	  		// not array
+	  			return addTwo(arguments[0],arguments[1]);
+	  		}
+		} 
+ 	} 
+}
+</pre>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+<script>
+
+function addTwo(c,d) {
+    return c + d;
+ 
+}
+
+function addOne(a) {
+  return function(b) {
+  	  	var a2 = Array.isArray(b);
+	  	if (a2) {
+	  			  	var undef;
+	  		return undef ;
+	  	} else {
+	  	// not array
+	  		return a + b;
+	  	}
+    
+  };
+}
+function addTogether() {
+  if (arguments.length===1 && typeof(arguments[0])==='number' ){
+		    return addOne(arguments[0]);	   
+  }
+ if (arguments.length===2) {
+	if(typeof(arguments[0])==='number' && typeof(arguments[1])==='number' ){
+	  	var a2 = Array.isArray(arguments[1]);
+	  	if (a2) {
+	  			  	var undef;
+	  		return undef ;
+	  	} else {
+	  	// not array
+	  		return addTwo(arguments[0],arguments[1]);
+	  	}
+    	
+    }
+    
+ } 
+}
+
+
+document.getElementById("demo").innerHTML += addTogether(2,3);
+														 //  should return 5.
+
+document.getElementById("demo2").innerHTML += addTogether(2)(3);
+											///  should return 5.
+document.getElementById("demo5").innerHTML += addTogether("http://bit.ly/IqT6zt");
+										// should return undefined
+										
+document.getElementById("demo3").innerHTML += addTogether(2, "3");
+									 		// should return undefined
+		
+document.getElementById("demo4").innerHTML += addTogether(2)([3]); 
+											// should return undefined.
+
+
+</script>
+
+</body>
+
+
+</html>

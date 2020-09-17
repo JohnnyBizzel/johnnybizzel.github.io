@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link  rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body>
+<h3>Pig Latin converter.</h3>
+Translate the provided string to pig latin.
+<br/>
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+
+function translatePigLatin(str) {
+
+
+
+  var returnArr = [];
+  strArr = str.split('');
+  
+
+  		
+  			// test regex for Vowel:
+  			var patt = /A|a|E|e|I|i|O|o|U|u/;
+  			var foundVowel = false;
+  			var c = 0;
+  			var consGrp = [];
+  			
+  			while(!foundVowel) {
+  				
+  				if (patt.test(strArr[0])) {
+					// found vowel is the first char	
+					foundVowel = true;			
+	  			  	// after = after.replaceAt(0, after.charAt(0).toUpperCase());
+	  			  	for (i = 0; i < strArr.length; i ++) {
+	  					returnArr.push(strArr[i]);
+	  				}
+	  				returnArr.push('w');
+	  				returnArr.push('a');
+	  				returnArr.push('y');
+	  			} else {
+	  				// consonant
+	  				
+	  				if (patt.test(strArr[c])) {
+	  					// check for next vowel
+	  					foundVowel = true;
+	  					for (i = c; i < strArr.length; i ++) {
+	  						returnArr.push(strArr[i]);
+	  					}
+	  					returnArr.push(consGrp.join(''));
+	  					returnArr.push('a');
+	  					returnArr.push('y');
+	  				} else {
+	  					consGrp.push(strArr[c]);
+	  				}
+	  				
+	  			}
+	  			c++;
+  			}
+	  			
+
+  				
+			returnArr = returnArr.join("");
+		
+			//returnArr.push(strArr[i]);		
+		
+
+
+  // Only change code above this line
+  return JSON.stringify(returnArr);
+}
+
+
+document.getElementById("demo").innerHTML = translatePigLatin("california");
+	 // should return "aliforniacay".
+
+document.getElementById("demo2").innerHTML = translatePigLatin("glove"); // should return "oveglay".
+
+document.getElementById("demo3").innerHTML = translatePigLatin("algorithm"); 
+	// should return "algorithmway".
+
+document.getElementById("demo4").innerHTML = translatePigLatin("eight"); // should return "eightway"
+
+ 
+</script>
+
+<pre class="prettyprint linenums" style="background: #E8E8E8">
+function translatePigLatin(str) {
+  var returnArr = [];
+  strArr = str.split('');
+
+  	// test regex for Vowel:
+  	var patt = /A|a|E|e|I|i|O|o|U|u/;
+  	var foundVowel = false;
+  	var c = 0;
+  	var consGrp = [];
+  			
+  	while(!foundVowel) {
+  				
+  		if (patt.test(strArr[0])) {
+		
+		// found vowel is the first char	
+			foundVowel = true;			
+  	  	// after = after.replaceAt(0, after.charAt(0).toUpperCase());
+  		  	for (i = 0; i < strArr.length; i ++) {
+  				returnArr.push(strArr[i]);
+  			}
+  			returnArr.push('w');
+  			returnArr.push('a');
+  			returnArr.push('y');
+  		} else {
+  			// consonant
+  				
+  			if (patt.test(strArr[c])) {
+  				// check for next vowel
+  				foundVowel = true;
+  				for (i = c; i < strArr.length; i ++) {
+  					returnArr.push(strArr[i]);
+  				}
+  				returnArr.push(consGrp.join(''));
+  				returnArr.push('a');
+  				returnArr.push('y');
+  				} else {
+  					consGrp.push(strArr[c]);
+  				}
+  				
+  		}
+  	c++;
+  	}
+  	
+  return returnArr.join("");;
+}
+</pre>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+</body>
+
+
+</html>

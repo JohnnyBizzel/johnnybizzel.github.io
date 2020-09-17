@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link  rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body>
+<h3>Exact change</h3>
+Design a cash register drawer function checkCashRegister() that accepts purchase price as the first argument (price),
+ payment as the second argument (cash), and cash-in-drawer (cid) as the third argument.
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<p id="demo5"></p>
+
+<pre class="prettyprint linenums">
+// Rounding number function:
+function rounded(number, precision) {
+    var factor = Math.pow(10, precision);
+    var tempNumber = number * factor;
+    var roundedTempNumber = Math.round(tempNumber);
+    return roundedTempNumber / factor;
+}
+
+
+function checkCashRegister(price, cash, cid) {
+  var change;
+
+var denom = [
+  { name: 'ONE HUNDRED', val: 100.00},
+  { name: 'TWENTY', val: 20.00},
+  { name: 'TEN', val: 10.00},
+  { name: 'FIVE', val: 5.00},
+  { name: 'ONE', val: 1.00},
+  { name: 'QUARTER', val: 0.25},
+  { name: 'DIME', val: 0.10},
+  { name: 'NICKEL', val: 0.05},
+  { name: 'PENNY', val: 0.01}
+];
+	// Make a register object and work out the total
+  var cashReg = cid.reduce(function(accumulator, denomVal) {
+    accumulator.total += denomVal[1];
+    accumulator[denomVal[0]] = denomVal[1];
+    return accumulator;
+  }, {total: 0});
+  
+  
+	cashReg.total = rounded(cashReg.total,2);
+	
+	var cashRegDenom = denom;
+	 
+  
+	change = cash - price;
+	change = rounded(change,2);
+	
+	  // Handle exact change
+   if (cashReg.total === change) {
+     return 'Closed';
+   }
+
+   // Handle insufficent funds
+   if (cashReg.total < change) {
+     return 'Insufficient Funds';
+   }
+
+	var changeLeft = change;
+	
+	// Reverse the input as the output is in highest demon first
+	function reversed(s) {
+	  	var o = [];
+  			for (var i = s.length - 1; i >= 0; i--)
+ 				o.push(s[i]);
+  			return o;
+	}
+	var cidRev = reversed(cid);
+	// Build an array of currency denomination of remaining money in the cash register. 
+	var changeToGiveToCustomerAry = cidRev.reduce(function (accumulation, item) {
+		
+
+		
+
+		var testDenom = {};
+		for (p = 0; p < denom.length; p++) {
+			function findDenom(den) {
+				return den.name === item[p];
+			}
+		
+			// if found the object we are looking for, we can break out of the loop 
+			if (Object.keys(testDenom).length === 0 && testDenom.constructor === Object) {
+				testDenom = denom.find(findDenom);
+			} else {
+				break;
+			}
+						
+		}
+		 
+		if (testDenom.val <= changeLeft && item[1] > 0) {
+			// denom must be smaller than change needed and we need some in the register so we can give it as change
+			
+				if (changeLeft > 0) {
+					// What's in the till versus what we need
+					var divisible = 1;  // counts the number of coins or notes needed
+					if (item[1] > changeLeft) {
+						divisible = Math.floor(changeLeft / testDenom.val); 		
+						var denomToUse = [item[0],  testDenom.val * divisible];
+						accumulation.push(denomToUse);
+						changeLeft -= testDenom.val * divisible; // item[1] gives us the value part	
+						changeLeft = changeLeft.toFixed(2);		
+					} else {
+						// use all this change!
+						var thisDenom = [item[0], item[1]];
+						accumulation.push(thisDenom);
+						changeLeft -= item[1];
+						changeLeft = rounded(changeLeft,2);
+					}
+					
+				}
+				
+		}
+		
+				// accumulation gets passed to the next parameter of reduce *an empty array.
+		return accumulation;  
+	}, []);
+
+   // Handle denomination for exact change not available
+   if (changeLeft > 0) {
+     return 'Correct change not available';
+   }
+   
+  return '$' + change + ' needed from ' + cashReg.total + ' ' + JSON.stringify(changeToGiveToCustomerAry);
+}
+</pre>
+<script>
+
+// Rounding number function:
+function rounded(number, precision) {
+    var factor = Math.pow(10, precision);
+    var tempNumber = number * factor;
+    var roundedTempNumber = Math.round(tempNumber);
+    return roundedTempNumber / factor;
+}
+
+
+function checkCashRegister(price, cash, cid) {
+  var change;
+
+var denom = [
+  { name: 'ONE HUNDRED', val: 100.00},
+  { name: 'TWENTY', val: 20.00},
+  { name: 'TEN', val: 10.00},
+  { name: 'FIVE', val: 5.00},
+  { name: 'ONE', val: 1.00},
+  { name: 'QUARTER', val: 0.25},
+  { name: 'DIME', val: 0.10},
+  { name: 'NICKEL', val: 0.05},
+  { name: 'PENNY', val: 0.01}
+];
+	// Make a register object and work out the total
+  var cashReg = cid.reduce(function(accumulator, denomVal) {
+    accumulator.total += denomVal[1];
+    accumulator[denomVal[0]] = denomVal[1];
+    return accumulator;
+  }, {total: 0});
+  
+  
+	cashReg.total = rounded(cashReg.total,2);
+	
+	var cashRegDenom = denom;
+	 
+  
+	change = cash - price;
+	change = rounded(change,2);
+	
+	  // Handle exact change
+   if (cashReg.total === change) {
+     return 'Closed';
+   }
+
+   // Handle insufficent funds
+   if (cashReg.total < change) {
+     return 'Insufficient Funds';
+   }
+
+	var changeLeft = change;
+	
+	// Reverse the input as the output is in highest demon first
+	function reversed(s) {
+	  	var o = [];
+  			for (var i = s.length - 1; i >= 0; i--)
+ 				o.push(s[i]);
+  			return o;
+	}
+	var cidRev = reversed(cid);
+	// Build an array of currency denomination of remaining money in the cash register. 
+	var changeToGiveToCustomerAry = cidRev.reduce(function (accumulation, item) {
+		
+
+		
+
+		var testDenom = {};
+		for (p = 0; p < denom.length; p++) {
+			function findDenom(den) {
+				return den.name === item[p];
+			}
+		
+			// if found the object we are looking for, we can break out of the loop 
+			if (Object.keys(testDenom).length === 0 && testDenom.constructor === Object) {
+				testDenom = denom.find(findDenom);
+			} else {
+				break;
+			}
+						
+		}
+		 
+		if (testDenom.val <= changeLeft && item[1] > 0) {
+			// denom must be smaller than change needed and we need some in the register so we can give it as change
+			
+				if (changeLeft > 0) {
+					// What's in the till versus what we need
+					var divisible = 1;  // counts the number of coins or notes needed
+					if (item[1] > changeLeft) {
+						divisible = Math.floor(changeLeft / testDenom.val); 		
+						var denomToUse = [item[0],  testDenom.val * divisible];
+						accumulation.push(denomToUse);
+						changeLeft -= testDenom.val * divisible; // item[1] gives us the value part	
+						changeLeft = changeLeft.toFixed(2);		
+					} else {
+						// use all this change!
+						var thisDenom = [item[0], item[1]];
+						accumulation.push(thisDenom);
+						changeLeft -= item[1];
+						changeLeft = rounded(changeLeft,2);
+					}
+					
+				}
+				
+		}
+		
+				// accumulation gets passed to the next parameter of reduce *an empty array.
+		return accumulation;  
+	}, []);
+
+   // Handle denomination for exact change not available
+   if (changeLeft > 0) {
+     return 'Correct change not available';
+   }
+   
+  return '$' + change + ' needed from ' + cashReg.total + ' ' + JSON.stringify(changeToGiveToCustomerAry);
+}
+
+document.getElementById("demo").innerHTML = "20 - 19.50: " + checkCashRegister(19.50, 20.00, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.10], ["QUARTER", 4.25], ["ONE", 90.00], ["FIVE", 55.00], ["TEN", 20.00], ["TWENTY", 60.00], ["ONE HUNDRED", 100.00]]); 
+// should return [["QUARTER", 0.50]]
+
+document.getElementById("demo2").innerHTML = "100 - 3.26: " + checkCashRegister(3.26, 100.00, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.10], ["QUARTER", 4.25], ["ONE", 90.00], ["FIVE", 55.00], ["TEN", 20.00], ["TWENTY", 60.00], ["ONE HUNDRED", 100.00]]); 
+/* should return [["TWENTY", 60.00], ["TEN", 20.00], ["FIVE", 15.00], 
+     ["ONE", 1.00], ["QUARTER", 0.50], ["DIME", 0.20], ["PENNY", 0.04]]
+*/
+
+
+
+document.getElementById("demo4").innerHTML = "20 - 19.50: " + checkCashRegister(19.50, 20.00, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 1], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]); 
+// should return "Insufficient Funds"
+
+
+document.getElementById("demo5").innerHTML = "20 - 19.50: " + checkCashRegister(19.50, 20.00, [["PENNY", 0.50], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]); 
+// should return "Closed"
+
+ 
+</script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+</body>
+
+
+</html>

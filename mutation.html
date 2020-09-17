@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background: #efefe2">
+<h3>Mutation.</h3>
+Return true if the string in the first element of the array contains all of the
+ letters of the string in the second element of the array.
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function mutation(arr) {
+	var charsToTest = arr[1].toLowerCase().split('');
+	var i;
+	var arrLen = charsToTest.length;
+	for (i = 0; i < arrLen ; i ++) {
+		// test for invalid Char Found		
+		if (arr[0].toLowerCase().indexOf(charsToTest[i]) < 0) return false; 	
+	}	
+	return true;
+}
+
+document.getElementById("demo").innerHTML = mutation(["hello", "HEY"]);    // false
+
+document.getElementById("demo2").innerHTML = mutation(["hello", "Hello"]);  // true
+
+document.getElementById("demo3").innerHTML = mutation(["zyxwvutsrqponmlkjihgfedcba", "qrstu"]); // true
+
+document.getElementById("demo4").innerHTML = mutation(["Mary", "Aarmy"]); // true
+ 
+</script>
+<pre  style="background: #efefef; width: 650px; border: 2px solid darkgreen; padding: 5px">
+function mutation(arr) {
+	var charsToTest = arr[1].toLowerCase().split('');
+	var i;
+	var arrLen = charsToTest.length;
+	for (i = 0; i < arrLen ; i ++) {
+		// test for invalid Char Found		
+		if (arr[0].toLowerCase().indexOf(charsToTest[i]) < 0) return false; 	
+	}	
+	return true;
+}
+
+</pre>
+
+
+</body>
+
+
+</html>

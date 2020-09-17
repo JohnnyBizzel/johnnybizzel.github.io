@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="styles/calcstyles.css">
+
+
+<meta charset="utf-8" />
+<title>Pocket Calculator</title>
+
+<script>
+$(function() {
+
+ 
+  // Handle AC and CE keys
+  $(".greykey").on("click", function(e) {
+	  	var valEntered = e.currentTarget.innerText;
+      var valCur =$("#outputFormula").text();
+
+	// get rid of any extra characters by only passing the 1st one. 
+       valEntered = valEntered.charAt(0);
+            
+      switch (valEntered) {
+          case "C": // Clear entry
+          	// get last number entered
+        		if (valCur.length > 0 &&         				
+        				!valCur.includes("+") &&
+        				!valCur.includes("-") &&
+        				!valCur.includes("*") &&
+						!valCur.includes("/")) {
+	            $("#outputFormula").html("");
+	          } else {
+	          	
+	          	var pos = valCur.length;
+
+	          	while(pos > 0) {
+	          		var chTest = valCur[valCur.length-1];
+                if (testNum(chTest) || chTest == '.' || chTest == '=') {
+                  valCur = valCur.substr(0,valCur.length-1);
+                  pos --;							
+                } else if (testMathFunc(chTest)) {
+                  pos = 0;
+                } else {											
+                  pos --;
+                }			          	
+	          	}
+	          	$("#outputFormula").html(valCur);
+	          }    		      	
+
+          break;
+          default: // AC (all clear) clicked
+          	$("#outputRes").html("0");
+          	$("#outputFormula").html("");
+          break;
+      }
+	});
+  
+  
+  $(".key").on("click", process);
+  $(document).on('keyup', process);
+  
+  function process(e) {
+    // TODO: add +/- key ...so you can do eg. 5/-5
+    // check if a key was pressed:
+    var btnPushed;
+    if (!e.currentTarget.innerText && e.key) {
+      // key press
+      btnPushed = e.key;
+    } else {
+      // mouse click
+      btnPushed = e.currentTarget.innerText;
+    }
+    
+    // check for resolved previous formula so we can start again
+    var formula = $("#outputFormula").text();
+    if (formula.substr(formula.length - 1) === "=") {
+      $("#outputFormula").text("");
+    }
+    var valEntered = btnPushed;
+    var valCur = $("#outputFormula").text();
+
+    // get rid of any extra characters by only passing the 1st one. 
+    valEntered = valEntered.charAt(0);
+
+    switch (valEntered) {
+      case "1":
+      case "2":
+      case "3":
+      case "4":
+      case "5":
+      case "6":
+      case "7":
+      case "8":
+      case "9":
+	      	if (valCur.length === 0) {
+	            $("#outputFormula").html(valEntered); 
+	          } else if (valCur.length === 1 && valCur.charAt(0) == '0') {
+	          	// if there is only 1 zero, overwrite it.
+	          	$("#outputFormula").html(valEntered);
+	         }	else if (valCur.charAt(valCur.length -1) == '0') {
+	            // test if we have an operator...
+	         	var lastNumIdx = testIfHaveOperator(valCur);
+	         	var latestNumber = (lastNumIdx > -1) ? 
+	         											valCur.substr(lastNumIdx, valCur.length - 1) : 
+	         											valCur.substr(0, valCur.length);
+	         	if (latestNumber.indexOf('.') === -1) {
+	         	// wipe out the last digit as it's a zero if no decimal points
+	            	valCur = valCur.substring(0, valCur.length - 1);
+	         	}
+	          	$("#outputFormula").html(valCur + valEntered);
+	          } else {
+	          	$("#outputFormula").html(valCur + valEntered);	            
+	          }
+
+      break;
+      case "0":
+        // testing start of string
+
+        		var testZero = new RegExp('0*.?0+');
+            //  surpress leading zeros and allow 11100110101 type
+	        	if (valCur == "0") {
+	        		$("#outputFormula").html("0");
+		        	break;
+	   		    }     	
+        
+       		if (valCur.length === 0) {
+	            $("#outputFormula").html( valEntered); 
+	          } else if (valCur == 0 && valCur.charAt(valCur.length -1) != '.') {
+	          		if (parseFloat(valCur) || testZero.test(valCur) ) {
+	          	 		$("#outputFormula").html(valCur + valEntered);
+	          	 	} else {
+	          	 		$("#outputFormula").html("0" );
+	          	 	}
+	          	
+	          }  else if (valCur.charAt(valCur.length -1) != '0') {
+	           // stop last number entered having leading zeros
+	           // TODO: check if ZERO!!!
+	           	$("#outputFormula").html(valCur + valEntered);	            
+	          } else {
+	          	var testLastNum = '';
+					
+					// got operators, is it not the 1st number?
+					var opIndex = testIfHaveOperator (valCur);
+	          	if (opIndex > -1) {
+	          		var idx = valCur.length -1;
+	          		while (valCur[idx] != '+' &&
+		          			valCur[idx] != '-' &&
+		          			valCur[idx] != '*' &&
+		          			valCur[idx] != '/') {
+	          	 		testLastNum += valCur[idx];	   
+	          	 		idx--;       	 	
+	          		}
+	          		if (testLastNum === valEntered) return; // both Zero
+	          		if (parseFloat(testLastNum) || testZero.test(testLastNum) ) {
+	          	 		$("#outputFormula").html(valCur + valEntered);
+	          	 	}
+	          	} else {
+	          		testLastNum = valCur;
+	          		
+	          		if (parseFloat(testLastNum) || testZero.test(testLastNum) ) {
+	          	 		$("#outputFormula").html(valCur + valEntered);
+	          	 	}
+	          	}
+	          	 
+	          	 
+	          }
+			break;           
+      case ".":
+        if (valCur.length == 0) {
+          $("#outputFormula").html("0" + valEntered);
+        } else if (testMathFunc(valCur[0]) && valCur.length == 1) {
+          $("#outputFormula").html(valCur + "0" + valEntered);
+        } else if (checkExpression(valCur)) { // test for valid numbers
+          // test last number entered if it is a decimal (has a dot)
+          if (valCur.charAt(valCur.length - 1) !== ".") {
+            $("#outputFormula").html(valCur + ".");
+          }
+
+        } else {
+          var lastEntered = valCur.split('')[valCur.length-1].match(/[\-|\+|\*|\/]/)
+          if (lastEntered) {
+            $("#outputFormula").html(valCur + "0" + valEntered);
+          } else {
+            $("#outputFormula").html(valCur);
+          }
+        }
+
+        break;
+
+      case "+":
+      case "-":
+
+        if (valCur.length != 0) {
+          // if previous char was not an operator
+          if (valCur[valCur.length - 1] != '+' &&
+            valCur[valCur.length - 1] != '-' &&
+            valCur[valCur.length - 1] != '*' &&
+            valCur[valCur.length - 1] != '/') {
+            		// decimal		          		
+		          	if (valCur[valCur.length-1] == '.') {
+								  $("#outputFormula").html(valCur + "0" + valEntered);	
+		          	} else {
+		          			$("#outputFormula").html(valCur + valEntered);	
+		          	}
+          } else {
+            console.log(valEntered);
+            // test if the operator was / or *  , then ok to append.           
+            if (valCur[valCur.length - 1] === '*' ||
+               valCur[valCur.length - 1] === '/') {
+              $("#outputFormula").html(valCur + valEntered);
+              break;
+            }  
+            
+            // replace the last operator if there is already one entered.
+            
+            valCur = valCur.substr(0, valCur.length - 1);
+            $("#outputFormula").html(valCur + valEntered);
+
+          }
+
+         } else {
+		          if (valEntered === '-') {
+		          	$("#outputFormula").html(valEntered);
+		          }	
+	       }
+        break;
+      case "÷":
+      case "/":
+        if (valCur.length != 0) {
+          // if previous char was not an operator
+          if (valCur[valCur.length - 1] != '+' &&
+            valCur[valCur.length - 1] != '-' &&
+            valCur[valCur.length - 1] != '*' &&
+            valCur[valCur.length - 1] != '/') {
+            $("#outputFormula").html(valCur + "/");
+          } else {
+            var valCurArray = Array.from(valCur);
+            var lastOne = valCurArray.pop();
+            var lastButOne = valCurArray.slice(valCur.length-2);
+            if ( /[+-]/.test(lastOne) && /[\/\*]/.test(lastButOne))
+            {           
+              valCur = valCur.substr(0, valCur.length - 2);
+              $("#outputFormula").html(valCur + "/");
+            } else {
+              valCur = valCur.substr(0, valCur.length - 1);
+              $("#outputFormula").html(valCur + "/");
+            }
+          }
+
+        };
+        break;
+      case "x":
+      case "*":
+        if (valCur.length != 0) {
+          if (valCur[valCur.length - 1] != '+' &&
+            valCur[valCur.length - 1] != '-' &&
+            valCur[valCur.length - 1] != '*' &&
+            valCur[valCur.length - 1] != '/') {
+            $("#outputFormula").html(valCur + "*");
+          } else {
+            var valCurArray = Array.from(valCur);
+            var lastOne = valCurArray.pop();
+            var lastButOne = valCurArray.slice(valCur.length-2);
+            if ( /[+-]/.test(lastOne) && /[\/\*]/.test(lastButOne))
+            {           
+              valCur = valCur.substr(0, valCur.length - 2);
+              $("#outputFormula").html(valCur + "*");
+            } else {
+              valCur = valCur.substr(0, valCur.length - 1);
+              $("#outputFormula").html(valCur + "*");
+            }
+          }
+        };
+        break;
+      case "=":
+      case "E":
+        // remove leading zeros
+        while (valCur.charAt(0) == '0') { // Assume we remove all leading zeros
+          if (valCur.length == 1) {
+            break
+          }; // But not final one.
+          if (valCur.charAt(1) == '.') {
+            break
+          }; // Nor one followed by '.'
+          valCur = valCur.substr(1, valCur.length - 1)
+        }
+        // Resolve expression (round number to avoid dodgy figures)
+        if (testExp(valCur)) {
+          var resolve = eval(valCur).toFixed(8);
+          $("#outputRes").html(parseFloat(resolve));
+        }
+        $("#outputFormula").html(valCur + "=");
+        break;
+
+      default:
+        $("#outputFormula").html(valCur);
+        break;
+    }
+
+  }
+});
+
+
+
+function testIfHaveOperator (val) { // i.e. the second or later number is being entered - return highest index
+	var opIndex = -1;
+	var retVar = false;
+	if (val.lastIndexOf('+') > -1 && val.lastIndexOf('+') > opIndex) opIndex = val.lastIndexOf('+');
+	if (val.lastIndexOf('-') > -1 && val.lastIndexOf('-') > opIndex) opIndex = val.lastIndexOf('-');
+	if (val.lastIndexOf('*') > -1 && val.lastIndexOf('*') > opIndex) opIndex = val.lastIndexOf('*');
+	if (val.lastIndexOf('/') > -1 && val.lastIndexOf('/') > opIndex) opIndex = val.lastIndexOf('/');
+	//(opIndex > -1) ? retVar = opIndex : retVar = false;
+	return opIndex;
+}
+	
+
+function testExp(expr) {
+  // test for mathematical expression
+  var regEx = new RegExp("^([-+/*]\d+(\.\d+)?)*");
+  return regEx.test(expr);
+}
+
+function testNum(numChar) {
+  // test for mathematical expression
+  var num = parseInt(numChar);
+  return !isNaN(num);
+}
+
+function testMathFunc(ch) {
+  // test for mathematical function
+  var regEx = new RegExp("^[-]|[+]");
+  return regEx.test(ch);
+}
+
+function checkExpression(xprAll) {
+  var xpr = xprAll.split('');
+  var leadingMinus = false;
+  var pos = 0;
+  // test for a leading operator
+  if (xpr[0] == '-') leadingMinus = true;
+  if (xpr[0] == '+') xpr.shift(); // ignore and remove
+
+  for (var i = pos; i < xpr.length; i++) {
+    switch (xpr[i]) {
+      case '+':
+      case '-':
+      case '/':
+      case '*':
+        xpr[i] = 'r';
+        break;
+    }
+  }
+  var valid = true;
+  var xprStr = xpr.join('');
+  if (leadingMinus) {
+    xprStr = xprStr.substr(1, xprStr.length - 1);
+    if (isNaN(parseFloat(xprStr))) {
+      valid = false;
+    } else {
+      xprStr = "-" + xprStr;
+    }
+
+  } else {
+    if (isNaN(parseFloat(xprStr)))
+      valid = false;
+  }
+  var parts = xprStr.split('r');
+  var lastPart = parts[parts.length - 1];
+  for (let number of parts) {
+    if (isNaN(parseFloat(number))) valid = false;
+  }
+  var countDots = 0;
+  for (var idx = 0; idx < lastPart.length; idx++) {
+    if (lastPart[idx] === '.') countDots++;
+    if (countDots > 0) valid = false;
+  }
+  return valid;
+}
+</script>
+
+</head>
+<body>
+<div class="mainbox container">
+  <div id="title">
+    <h1>Pocket Calculator</h1>
+  </div>
+  <div id="output">
+    <p><span id="outputRes">0</span><br/>
+      <span id="outputFormula"></span></p>
+  </div>
+  <!-- rows of buttons -->
+
+    <div class="row row-centered">
+      <div class="col-xs-1 col-centered  greykey">
+        <div id="allClear" class="keytext red">AC</div>
+      </div>
+        <div class="col-xs-1 col-centered greykey">
+          <div id="clearEntry" class="keytext red">CE</div>
+        </div>
+        <div class="col-xs-1 col-centered" style="width: 62px"></div>
+        <div class="col-xs-1 col-centered key">
+          <div class="keytext">÷</div>
+        </div>
+    </div>
+  
+    <div class="row row-centered">
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">7</div>
+      </div>
+      <div class="col-xs-1 col-centered key">
+          <div class="keytext">8</div>
+      </div>
+      <div class="col-xs-1 col-centered key">
+            <div class="keytext">9</div>
+      </div>
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">x</div>
+      </div>
+    </div>
+    <div class="row row-centered">
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">4</div>
+      </div>
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">5</div>
+      </div>
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">6</div>
+      </div>
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">-</div>
+      </div>
+    </div>
+    <div class="row row-centered">
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">1</div>
+      </div>
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">2</div>
+      </div>
+        <div class="col-xs-1 col-centered key">
+          <div class="keytext">3</div>
+      </div>
+        <div class="col-xs-1 col-centered key">
+          <div class="keytext">+</div>
+      </div>
+       
+    </div>
+    <div class="row row-centered">
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">0</div>
+      </div>
+      <div class="col-xs-1 col-centered key">
+        <div class="keytext">.</div>
+      </div>
+      <div class="col-xs-2 col-centered key fatkey">
+        <div class="keytext">=</div>
+      </div>      
+    </div>
+
+</div>
+</body>
+</html>

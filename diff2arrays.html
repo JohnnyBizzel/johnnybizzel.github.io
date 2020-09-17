@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link  rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body>
+<h3>Diff Two Arrays</h3>
+Find items not in both arrays
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function diffArray(arr1,arr2) {
+	var finalArr = [];
+	var longArray = [];
+	var shortArray = [];
+	if (arr1.length > arr2.length) {
+		longArray = arr1;
+		shortArray = arr2;
+	} else {
+		longArray = arr2;
+		shortArray = arr1;	
+	}
+  	if (JSON.stringify(arr1)==JSON.stringify(arr2)) {
+  		return finalArr;
+  	}
+
+	var found = false;
+	var i;
+	var lngAryLen = longArray.length;	
+	var shoAryLen = shortArray.length
+   for (i = 0; i < lngAryLen; i++) {
+        for (j = 0; j < shoAryLen.length; j++) {
+        		if (longArray[i] === shortArray[j]) {
+        			found = true;
+        			continue;
+        		}
+        		
+        }
+        if (!found) {
+					finalArr.push(longArray[i]);        		
+        }
+       found = false;
+    }
+    found = false;
+     for (i = 0; i < shoAryLen; i++) {
+        for (j = 0; j < lngAryLen; j++) {
+        		if (longArray[j] === shortArray[i]) {
+        			found = true;
+        			continue;
+        		}
+        		
+        }
+        if (!found) {
+					finalArr.push(shortArray[i]);        		
+        }
+       found = false;
+    }
+    
+    
+	return finalArr;
+}
+
+
+ 
+
+document.getElementById("demo").innerHTML = diffArray([1, 2, 3, 5], [1, 2, 3, 4, 5]);	    // [4]
+
+document.getElementById("demo2").innerHTML = diffArray([], ["snuffleupagus", "cookie monster", "elmo"]);  // ["snuffleupagus", "cookie monster", "elmo"]
+
+document.getElementById("demo3").innerHTML = diffArray(["andesite", "grass", "dirt", "pink wool", "dead shrub"], ["diorite", "andesite", "grass", "dirt", "dead shrub"]); // true
+// should return ["diorite", "pink wool"]
+
+document.getElementById("demo4").innerHTML = diffArray([1, "calf", 3, "piglet"], [7, "filly"]);
+ // [1, "calf", 3, "piglet", 7, "filly"].
+
+</script>
+<pre class="prettyprint linenums">
+function diffArray(arr1,arr2) {
+   var finalArr = [];
+   var longArray = [];
+   var shortArray = [];
+   if (arr1.length > arr2.length) {
+	  longArray = arr1;
+	  shortArray = arr2;
+   } else {
+	  longArray = arr2;
+	  shortArray = arr1;	
+   }
+   
+   if (JSON.stringify(arr1)==JSON.stringify(arr2)) {
+  		return finalArr;
+   }
+
+	 var found = false;
+	 var i;
+	 var lngAryLen = longArray.length;	
+	 var shoAryLen = shortArray.length
+    for (i = 0; i < lngAryLen; i++) {
+        for (j = 0; j < shoAryLen.length; j++) {
+        		if (longArray[i] === shortArray[j]) {
+        			found = true;
+        			continue;
+        		}
+        		
+        }
+        if (!found) finalArr.push(longArray[i]);        		
+       found = false;
+    }
+    found = false;
+    for (i = 0; i < shoAryLen; i++) {
+        for (j = 0; j < lngAryLen; j++) {
+        		if (longArray[j] === shortArray[i]) {
+        			found = true;
+        			continue;
+        		}
+        		
+        }
+        if (!found) finalArr.push(shortArray[i]);        		
+       found = false;
+    }
+    return finalArr;
+}
+</pre>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+</body>
+
+
+</html>

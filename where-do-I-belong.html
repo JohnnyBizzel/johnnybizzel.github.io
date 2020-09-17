@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Where do I belong</h3>
+
+<p>Return the lowest index at which a value (second argument) should be inserted into an array (first argument) once it has been sorted.</p>
+
+
+<p id="demo1"></p>
+<p id="demo2"></p>
+<p id="demo3"></p>
+
+<script>
+function getIndexToIns(arr, num) {
+  // Find my place in this sorted array.
+  var sorted = arr.sort(function(a, b){return a-b ;});
+  var retval = 0;
+  var inserted = false;
+  for (i = 0; i < arr.length; i++) {
+    
+    console.log(sorted[i] + '-' + inserted);
+    if (sorted[i] >= num && inserted === false)
+      {  retval = i;
+         inserted = true;
+      }
+    if (inserted === false) retval = arr.length;
+  }
+  
+  return retval;
+}
+
+
+document.getElementById("demo1").innerHTML = '([10, 20, 30, 40, 50], 35) ... ' + getIndexToIns([10, 20, 30, 40, 50], 35);
+document.getElementById("demo2").innerHTML = '([5, 3, 20, 3], 5) ... ' + getIndexToIns([5, 3, 20, 3], 5);
+document.getElementById("demo3").innerHTML = '([2, 5, 10], 15) ... ' + getIndexToIns([2, 5, 10], 15);
+
+</script>
+
+</body>
+</html>

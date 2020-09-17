@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<style type="text/css">
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 24pt;
+  
+  color: #fff;
+  background: #888;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+section {
+  	text-align: center;
+   min-height: 100%;
+}
+
+h1 {
+   font-size: 2em;
+  	padding: 0.2em 0em;
+  	line-height: 1em;
+	background-color: rgba(255, 125, 20, 0.3);
+}
+.retro {
+   color:#e5e5d5 ;
+   letter-spacing: .06em;
+  /* text-shadow: 
+      4px 4px 0px #2c2c2c, 
+      7px 7px 0px rgba(0, 0, 0, 0.2);*/
+      text-shadow:
+       3px 3px 0 #000,
+     -1px -1px 0 #000,  
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+       1px 1px 0 #000;
+   -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: black;
+}
+p {
+  padding: 0 1em;
+}
+
+a {
+  color: #c5c5ff;
+}
+.center {
+  margin-right: auto;
+  margin-left: auto;
+  width: 400px
+}
+
+footer {
+  position: absolute;
+  bottom: 2px;
+  font-size: 0.4em;
+  background-color: rgba(50, 50, 50, 0.7);;
+  border-radius: 10px
+}
+
+#temperature {
+   text-decoration: none;
+  	border-bottom: 0.05em dotted blue;
+}
+
+</style>
+<title>Local Weather</title>
+
+</head>
+<body>
+<section>
+  <h1 class="retro" id="city">Local Weather</h1>
+  <h2> <a id="temperature" class="retro" href="#" onclick="switchUnits(); return false;" title ="Click to switch between metric and imperial units"></a><span id= "weather" class="retro" /></h2>
+</section>
+
+<div class="center">
+  <footer>
+    <p>Images: <a href="http://flickr.com/services/api/">Flickr</a> (<a id="image-source" href="#">Image source</a>)  Weather data: <a href="http://openweathermap.org">Openweathermap.org</a>
+</p>
+
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+var weatherData = {
+  city: document.querySelector ("#city"),
+  weather: document.querySelector ("#weather"),
+  temperature: document.querySelector("#temperature"),
+  temperatureValue: 0,
+  units: "°C"
+  
+};
+
+function roundTemperature(temperature){
+			temperature = temperature.toFixed(0);
+			return temperature;
+		}
+
+function switchUnits (){
+  
+  if (weatherData.units == "°C") {
+    weatherData.temperatureValue = roundTemperature(weatherData.temperatureValue * 9/5 + 32);
+    weatherData.units = "°F";
+  
+} else {
+  weatherData.temperatureValue = roundTemperature ((weatherData.temperatureValue -32) * 5/9);
+    weatherData.units = "°C";  
+}
+
+  weatherData.temperature.innerHTML = weatherData.temperatureValue + weatherData.units + " ";
+}
+
+
+function getLocationAndWeather(lat, lon){
+  if (window.XMLHttpRequest){
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", function() {
+      var response = JSON.parse(xhr.responseText);
+
+      var position = {
+        latitude: lat,
+        longitude: lon
+      };
+      var cityName = response.name;
+      var weatherSimpleDescription = 
+response.weather[0].description;
+      var weatherDescription = response.weather[0].main;
+      var weatherTemperature = roundTemperature(response.main.temp);
+
+
+		var heading1 = document.getElementsByTagName('h1')[0];
+		heading1.style.backgroundColor = "#888";
+      if (weatherTemperature <= 0) {
+        /* (not using jQuery) $('h1').css({'background-color': 'rgba(11, 120, 160, 0.3)'});*/
+        heading1.style.backgroundColor = 'rgba(11, 120, 160, 0.3)';
+        // other colors for different temps.
+      } else if (weatherTemperature > 0 && weatherTemperature <= 7) {
+        heading1.style.backgroundColor = 'rgba(0, 119, 0, 0.3)';
+      } else if(weatherTemperature > 7 && weatherTemperature <= 14) {
+        heading1.style.backgroundColor = 'rgba(0, 255, 0, 0.3)';
+      } else if(weatherTemperature > 14 && weatherTemperature <= 24) {
+        heading1.style.backgroundColor = 'rgba(255, 255, 0, 0.3)';
+      }
+      
+      weatherData.temperatureValue = weatherTemperature;
+
+      loadBackground(position.latitude, position.longitude, weatherSimpleDescription);
+      weatherData.city.innerHTML = cityName;
+      weatherData.weather.innerHTML =  ", " + weatherDescription;
+      weatherData.temperature.innerHTML = weatherTemperature + weatherData.units;
+    }, false);
+
+    xhr.addEventListener("error", function(err){
+      alert("Could not complete the request");
+    }, false);
+    xhr.open("GET", 'https://fcc-weather-api.glitch.me/api/current?lat='+lat+'&lon='+lon);
+    xhr.send();
+  }
+  else{
+    alert("Unable to fetch the location and weather data.");
+  }           
+}
+
+
+function loadBackground(lat, lon, weatherTag) {
+  var script_element = document.createElement('script');
+
+	// using my api key
+  script_element.src = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=0e4b8ac94c5aa0eec53549d8e89160b7&lat=" + lat + "&lon=" + lon + "&accuracy=1&tags=" + "clear" + "&sort=relevance&extras=url_l&format=json";
+  
+  document.getElementsByTagName('head')[0].appendChild(script_element);
+}
+
+function jsonFlickrApi(data){
+  if (data.photos.pages > 0){
+    //var randomPhotoId = parseInt(data.photos.total);
+    var photo = data.photos.photo[Math.floor(Math.random()*parseInt(data.photos.photo.length))];
+    document.querySelector("body").style.backgroundImage = "url('" + photo.url_l + "')";
+    document.querySelector("#image-source").setAttribute("href", "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id);
+  }
+  else{
+    document.querySelector("body").style.backgroundImage = "url('https://c1.staticflickr.com/9/8838/18298603925_12e261e95b_h.jpg')";
+    document.querySelector("#image-source").setAttribute("href", "https://www.flickr.com/photos/superfamous/310185523/sizes/o/");
+  }
+}
+
+$(document).ready(() => {
+  $.getJSON('https://ipinfo.io/json', (response) => {
+    getLocationAndWeather(response.loc.split(',')[0],response.loc.split(',')[1]);
+  })
+});
+
+</script>
+
+</body>
+</html>

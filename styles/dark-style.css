@@ -1,0 +1,67 @@
+body {
+  background-color: grey;
+}
+header {
+  margin: 40px;  
+}
+table {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 2px;
+    border-color: silver;
+  border: 1px solid silver;
+}
+
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+  border:inherit;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+tbody tr:nth-child(odd) {
+  background: #3a4655;
+}
+tfoot {
+    display: table-footer-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+table > tr {
+    vertical-align: middle;
+}
+
+col {
+    display: table-column;
+}
+
+colgroup {
+    display: table-column-group;
+}
+
+tr {
+  border:inherit;
+}
+
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+   font-size: .9em; 
+  font-weight: normal; 
+  border:inherit;
+}
+
+th {
+    font-weight: bold;
+}
+
+caption {
+    display: table-caption;
+    text-align: center;
+}

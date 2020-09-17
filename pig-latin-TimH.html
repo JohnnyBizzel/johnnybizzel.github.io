@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body>
+<h3>Pig Latin converter.</h3>
+Translate the provided string to pig latin.
+<br/>
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+
+function translatePigLatin(str) {
+  // pig = ''  // might be an array?
+  // vowels = [] // do we need an array of vowels?
+ var splitStr = str.split('');
+	var patt = /a|e|i|o|u/;
+	if (patt.test(splitStr[0])) {
+		splitStr.push('way');
+		return splitStr.join('');	
+	} else {
+		var firstChar = splitStr[0];
+		splitStr.push(firstChar);
+		splitStr.shift();
+		for (var i = 0; i < splitStr.length; i++) {
+			if (!patt.test(splitStr[i])) {
+				var char = splitStr[i];
+				splitStr[i].shift();
+				splitStr.push(char);
+				return splitStr.join('');
+			}
+		}
+	
+	
+	}
+	
+
+
+  // Only change code above this line
+  return JSON.stringify(returnArr);
+}
+
+
+document.getElementById("demo").innerHTML = translatePigLatin("california");
+	 // should return "aliforniacay".
+
+document.getElementById("demo2").innerHTML = translatePigLatin("glove"); // should return "oveglay".
+
+document.getElementById("demo3").innerHTML = translatePigLatin("algorithm"); 
+	// should return "algorithmway".
+
+document.getElementById("demo4").innerHTML = translatePigLatin("eight"); // should return "eightway"
+
+ 
+</script>
+
+</body>
+
+
+</html>

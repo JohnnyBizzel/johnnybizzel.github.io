@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background: #efefe2">
+<h3>Filtering.</h3>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function removeNulls(val) {
+	 if (val != false && val != "" && val != 0 && val != NaN && val != null && val != undefined)
+    	return val;
+}
+
+function bouncer(arr) {
+  // Don't show a false ID to this bouncer.
+  
+  return arr.filter(removeNulls);
+}
+
+document.getElementById("demo").innerHTML = bouncer([7, "ate", "", false, 9]);    
+	// should return [7, "ate", 9
+
+document.getElementById("demo2").innerHTML = bouncer(["a", "b", "c"]);  
+	// should return ["a", "b", "c"]
+
+document.getElementById("demo3").innerHTML = bouncer([false, null, 0, NaN, undefined, ""]);
+	// should return []
+
+document.getElementById("demo4").innerHTML = bouncer([1, null, NaN, 2, undefined]);
+   // should return [1, 2]
+ 
+</script>
+
+<pre style="background: #efefef; width: 600px; border: 2px solid green; padding: 8px">
+function removeNulls(val) {
+	 if (val != false && val != "" && val != 0 && val != NaN && 
+	 		val != null && val != undefined)
+    	return val;
+}
+
+function bouncer(arr) {
+  // Don't show a false ID to this bouncer.
+  
+  return arr.filter(removeNulls);
+}
+</pre>
+</body>
+
+
+</html>

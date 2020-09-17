@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background: #c3efe2">
+<h3>Array into chunks.</h3>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function chunkArrayInGroups(arr, size) {
+  // Break it up.
+  var slices = Math.floor(arr.length / size) + 1;
+  var lastChunk = arr.length % size;	
+    
+  var slicedArr = [];
+  var pos = 0;
+  for (i = 0; i < slices; i ++) {
+  		var chunk = [];
+  		if ((size + pos) > arr.length )
+  		{
+			// use last chunk
+			if (lastChunk > 0) {
+				chunk = (arr.slice(pos, pos + size));
+				slicedArr.push(chunk);		
+			}
+				
+				  		
+  		} else {
+  			chunk = (arr.slice(pos, pos + size));	
+  			slicedArr.push(chunk);		
+  		}
+		
+		
+		pos += size;  
+  }
+  
+  return JSON.stringify(slicedArr);
+}
+
+
+
+document.getElementById("demo").innerHTML = chunkArrayInGroups(["a", "b", "c", "d"], 2); 
+  //should return [["a", "b"], ["c", "d"]];
+document.getElementById("demo2").innerHTML = chunkArrayInGroups([0, 1, 2, 3, 4, 5], 3);
+ // should return [[0, 1, 2], [3, 4, 5]].
+document.getElementById("demo3").innerHTML = chunkArrayInGroups([0, 1, 2, 3, 4, 5, 6], 3);
+  // should return [[0, 1, 2], [3, 4, 5], [6]]
+document.getElementById("demo4").innerHTML = chunkArrayInGroups([0, 1, 2, 3, 4, 5, 6, 7, 8], 4); 
+  // should return [[0, 1, 2, 3], [4, 5, 6, 7], [8]]
+</script>
+
+<pre style="background: #efffd9; width: 500px; border: 3px solid darkgreen; padding: 5px">
+function chunkArrayInGroups(arr, size) {
+  // Break it up.
+  var slices = Math.floor(arr.length / size) + 1;
+  var lastChunk = arr.length % size;	
+    
+  var slicedArr = [];
+  var pos = 0;
+  for (i = 0; i < slices; i ++) {
+	var chunk = [];
+  	if ((size + pos) > arr.length )
+  	{
+		// use last chunk
+		if (lastChunk > 0) {
+			chunk = (arr.slice(pos, pos + size));
+			slicedArr.push(chunk);		
+		}
+				  		
+  	} else {
+  		chunk = (arr.slice(pos, pos + size));	
+  		slicedArr.push(chunk);		
+  	}
+		
+	pos += size;  
+  }
+  
+  return (slicedArr);
+}
+</pre>
+
+</body>
+
+
+</html>

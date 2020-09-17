@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body>
+<h3>Array Slasher.</h3>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function slasher(arr, howMany) {
+  // it doesn't always pay to be first
+  var ret = arr.splice(howMany, arr.length - howMany);
+   return JSON.stringify(ret);
+}
+document.getElementById("demo").innerHTML = slasher([1, 2, 3], 2);; 
+  // should return [3].
+document.getElementById("demo2").innerHTML = slasher([1, 2, 3], 0);
+ // should return [1, 2, 3].
+document.getElementById("demo3").innerHTML = slasher([1, 2, 3], 9);
+  // should return []
+document.getElementById("demo4").innerHTML = slasher([1, 2, "chicken", 3, "potatoes", "cheese", 4], 5); 
+  // should return ["cheese", 4]
+</script>
+<pre style="background: #e6ff99; width: 380px; border: 3px solid #EBB30D; padding: 5px">
+function slasher(arr, howMany) {
+  <span style="color: grey">// it doesn't always pay to be first</span>
+  return arr.splice(howMany, arr.length - howMany);    
+}
+</pre>
+</body>
+
+
+</html>

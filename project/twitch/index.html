@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- https://wind-bow.hyperdev.space/twitch-api 
+see https://github.com/justintv/Twitch-API -->
+<meta charset="utf-8" />
+<title>Twitch TV</title>
+<link rel="stylesheet" href="css/style.css">
+	  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Exo+2'>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+<header>
+  <div class="flexible">
+  <h1 class="flexible-item">Twitch TV Radio Times</h1>
+  <img class="flexible-item" id="logo" src="http://coding.citytravelling.me.uk/project/twitch/img/White_RGB.svg">
+  </div>
+  <p>List of Twitch TV users who are currently streaming or not. Use the buttons to see who is streaming online now. Sit back, relax, get the popcorn and enjoy the show.</p>
+</header>
+<section role="main" class="main">
+<aside>
+<nav role="navigation">
+	<ul>
+	  <li class="skewed-box bg-green"><span id="online-streams" class="ucase">Online</span></li>
+	  <li class="skewed-box bg-red"><span id="offline-streams" class="ucase">Offline</span></li>
+	  <li class="skewed-box bg-grey"><span id="all-streams" class="ucase">All</span></li>
+	</ul>
+</nav>
+</aside>
+<section id="twitch-online" class="flex-container">
+<!-- dynamically create these -->
+<!--<div id="stream-1" class="box">
+<h3>one</h3>
+</div>
+<div id="stream-2" class="box">
+<h3>two</h3>
+</div>
+<div id="stream-3" class="box">
+<h3>three</h3>
+</div>
+<div id="stream-4" class="box">
+<h3>four</h3>
+</div>
+<div id="stream-5" class="box">
+<h3>5</h3>
+</div>-->
+
+</section>
+<section id="twitch-offline" class="flex-container">
+<!-- dynamically create these -->
+<div id="offline-1" class="box">
+<h3>one</h3>
+</div>
+<div class="box">
+<h3>two</h3>
+</div>
+<div class="box">
+<h3>three</h3>
+</div>
+<div class="box">
+<h3>four</h3>
+</div>
+</section>
+<section id="twitch-all" class="flex-container">
+<!-- dynamically create these -->
+
+</section>
+
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+<script src="scripts/javascript.js"></script>
+
+</body>
+</html>

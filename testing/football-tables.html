@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />
+  <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" />
+  <title>CodePen - REACT Football Tables</title>
+  
+  
+  
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css'>
+
+ <style>
+      html {
+  text-align: center;
+}
+
+img {
+  height: 40px;
+  width: auto;
+}
+
+button {
+  margin: 10px 0;
+}
+
+.t-wide {
+  width: 58%;
+  margin: 5px auto;
+}
+
+.leaderboard {
+  text-align: center;
+}
+
+.cellCenter {
+  text-align: center;
+  vertical-align: middle;
+}
+
+</style>
+
+  
+  
+  
+  
+
+</head>
+
+<body translate="no" >
+
+  <div class="d-flex flex-column container">
+  <h1 class="leaderboard">European Football Tables</h1>  
+  <div id="app"></div>
+</div>
+  
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/16.4.2/umd/react.production.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.2/umd/react-dom.production.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js'></script>
+
+  
+
+    <script >
+      var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}var App = function (_React$Component) {_inherits(App, _React$Component);
+  function App() {_classCallCheck(this, App);var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
+
+    _this.state = {
+      showTableText: 'Showing all-time list',
+      userData: [] };
+
+    _this.loadTable = _this.loadTable.bind(_this);return _this;
+  }_createClass(App, [{ key: 'componentDidMount', value: function componentDidMount()
+
+    {var _this2 = this;
+
+      axios.get('https://football-tables-api.glitch.me/api/PL').
+      then(function (_ref) {var data = _ref.data;
+        console.log(data);
+        _this2.setState({
+          userData: data.standings[0].table,
+          showTableText: 'Showing English Premier League' });
+
+      }).catch(function (err) {
+        console.log("ERROR - Cannot fetch data");
+      });
+
+    } }, { key: 'loadTable', value: function loadTable(
+
+    e) {var _this3 = this;
+      console.log(e.target.value);
+      axios.get('https://football-tables-api.glitch.me/api/' + e.target.value).
+      then(function (_ref2) {var data = _ref2.data;
+        _this3.setState({
+          userData: data.standings[0].table });
+
+      }).then(function () {
+        _this3.setState({
+          showTableText: lgName });
+
+      }).catch(function (err) {
+        console.log("ERROR - Cannot fetch data");
+      });
+    }
+
+    // 'Showing English Premier League'
+    // 'Showing German Bundesliga'
+    // 'Showing Spanish Primera Division'
+    // 'Showing Italian Serie A''
+  }, { key: 'render', value: function render()
+    {
+      return (
+        React.createElement('div', null,
+          React.createElement('div', { className: 'container-fluid d-sm-inline-flex justify-content-around' },
+            React.createElement('button', { className: 'btn btn-outline-secondary', value: 'PL', onClick: this.loadTable }, 'English Premier League'),
+            React.createElement('button', { className: 'btn btn-outline-secondary', value: 'BL1', onClick: this.loadTable }, 'German Bundesliga'),
+            React.createElement('button', { className: 'btn btn-outline-secondary', value: 'PD', onClick: this.loadTable }, 'Spanish Primera Division'),
+            React.createElement('button', { className: 'btn btn-outline-secondary', value: 'SA', onClick: this.loadTable }, 'Italian Serie A'),
+            React.createElement('br', null)),
+
+          React.createElement('div', { className: 'center-block d-flex justify-content-center' },
+            React.createElement('select', { name: 'switchLeague', onChange: this.loadTable },
+              React.createElement('option', { value: '0' }, 'Select...'),
+              React.createElement('option', { value: 'PL' }, 'Premier League'),
+              React.createElement('option', { value: 'ELC' }, 'Championship'),
+              React.createElement('option', { value: 'BL1' }, '1. Bundesliga'),
+              React.createElement('option', { value: 'PD' }, 'La Liga Primera Div.'),
+              React.createElement('option', { value: 'FL1' }, 'Ligue 1'),
+              React.createElement('option', { value: 'DED' }, 'Eredivisie'),
+              React.createElement('option', { value: 'PPL' }, 'Primeira Liga'))),
+
+
+          React.createElement(LeagueTable, { userData: this.state.userData ? this.state.userData : null })));
+
+
+    } }]);return App;}(React.Component);
+
+// <LeagueTable userData={this.state.userData} showRecentText={this.state.showRecentText} />
+var
+LeagueTable = function (_React$Component2) {_inherits(LeagueTable, _React$Component2);function LeagueTable() {_classCallCheck(this, LeagueTable);return _possibleConstructorReturn(this, (LeagueTable.__proto__ || Object.getPrototypeOf(LeagueTable)).apply(this, arguments));}_createClass(LeagueTable, [{ key: 'render', value: function render()
+    {
+      return (
+        React.createElement('div', null,
+          React.createElement('div', { className: 'text-center text-success font-weight-bold' }, this.props.showTableText),
+
+          React.createElement('table', { className: 'table t-wide table-striped table-bordered table-condensed' },
+            React.createElement('thead', null,
+              React.createElement('th', { className: 'text-center' }, 'Pos'),
+              React.createElement('th', { className: 'text-center', colSpan: 2 }, 'Team'),
+              React.createElement('th', { className: 'text-center' }, 'Games Played'),
+              React.createElement('th', { className: 'text-center' }, 'Points'),
+              React.createElement('th', { className: 'text-center' }, 'Goal Diff')),
+
+            React.createElement('tbody', null,
+              this.props.userData.map(function (tm, i) {
+                return (
+                  React.createElement('tr', null,
+                    React.createElement('td', null, i + 1),
+                    React.createElement('td', null, tm.team.name),
+                    React.createElement('td', { className: 'cellCenter' }, React.createElement('img', { src: tm.team.crestUrl })),
+                    React.createElement('td', { className: 'cellCenter' }, tm.playedGames),
+                    React.createElement('td', { className: 'cellCenter' }, tm.points),
+                    React.createElement('td', { className: 'cellCenter' }, tm.goalDifference)));
+
+              })))));
+
+
+
+
+
+
+    } }]);return LeagueTable;}(React.Component);
+
+
+
+
+ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
+    </script>
+
+
+
+  
+  
+
+  <script src="https://static.codepen.io/assets/editor/live/css_reload-2a5c7ad0fe826f66e054c6020c99c1e1c63210256b6ba07eb41d7a4cb0d0adab.js"></script>
+</body>
+
+</html>
+ 

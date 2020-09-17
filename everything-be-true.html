@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body style="background-color: #e0e0ea">
+<h3>Everything Be True</h3>
+Check if the predicate (second argument) is truthy on all elements of a collection (first argument).
+
+<pre>truthCheck([{"user": "Tinky-Winky", "sex": "male"}, {"user": "Dipsy", "sex": "male"}, {"user": "Laa-Laa", "sex": "female"}, {"user": "Po", "sex": "female"}],<br/> "sex");</pre>
+<p id="demo"></p>
+
+<pre>truthCheck([{"user": "Tinky-Winky", "sex": "male"}, {"user": "Dipsy"}, {"user": "Laa-Laa", "sex": "female"}, {"user": "Po", "sex": "female"}],<br/> "sex"); </pre>
+<p id="demo2"></p>
+
+<pre>truthCheck([{"single": "yes"}], "single");</pre> 
+<p id="demo3"></p>
+
+<pre>truthCheck([{"single": ""}, {"single": "double"}], "single");</pre>
+<p id="demo4"></p>
+
+<pre>truthCheck([{"single": "double"}, {"single": NaN}], "single"); </pre>
+<p id="demo5"></p>
+
+<pre class="prettyprint linenums">
+function truthCheck(collection, pre) {
+  // Is everyone being true?
+  var isTrue = true;  // assume all have the prop u checking
+  collection.forEach(function(val) {
+    if (!val.hasOwnProperty(pre))  { 
+    	
+      isTrue = false;   // if at least one of the object doesn't have the property you are checking... 
+    } 
+    // Test for illegal values
+    if (!val[pre]) {
+    	isTrue = false; 
+    }
+    	 
+  });
+	return isTrue;
+}
+</pre>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+<script>
+
+
+
+function truthCheck(collection, pre) {
+  // Is everyone being true?
+  var isTrue = true;  // assume all have the prop u checking
+  collection.forEach(function(val) {
+    if (!val.hasOwnProperty(pre))  { 
+    	
+      isTrue = false;   // if at least one of the object doesn't have the property you are checking... 
+    } 
+    // Test for illegal values
+    if (!val[pre]) {
+    	isTrue = false; 
+    }
+    	 
+  });
+	return isTrue;
+}
+
+
+ 
+
+document.getElementById("demo").innerHTML = truthCheck([{"user": "Tinky-Winky", "sex": "male"}, {"user": "Dipsy", "sex": "male"}, {"user": "Laa-Laa", "sex": "female"}, {"user": "Po", "sex": "female"}], "sex"); 
+			// should return true.
+
+document.getElementById("demo2").innerHTML = truthCheck([{"user": "Tinky-Winky", "sex": "male"}, {"user": "Dipsy"}, {"user": "Laa-Laa", "sex": "female"}, {"user": "Po", "sex": "female"}], "sex"); 
+		// should return false.
+		
+document.getElementById("demo3").innerHTML = truthCheck([{"single": "yes"}], "single"); 
+		// should return true
+		
+document.getElementById("demo4").innerHTML = truthCheck([{"single": ""}, {"single": "double"}], "single");
+	 // should return false
+
+document.getElementById("demo5").innerHTML = truthCheck([{"single": "double"}, {"single": NaN}], "single"); 
+	// should return false 
+								
+</script>
+
+</body>
+
+
+</html>

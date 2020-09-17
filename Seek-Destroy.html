@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background: #efefe2">
+<h3>Seek and Destroy.</h3>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<script>
+
+function removeValue(val) {
+	 return (val != this);
+}
+
+function destroyer(arr) {
+  var testArr = arr;
+  var args = Array.from(arguments);
+  for (var i = 1; i < args.length; i++) {
+		testArr = testArr.filter(removeValue, args[i]);
+  
+  }
+  
+  return JSON.stringify(testArr);
+}
+
+document.getElementById("demo").innerHTML = destroyer([1, 2, 3, 1, 2, 3], 2, 3) ; 
+	// should return [1, 1]
+
+document.getElementById("demo2").innerHTML = destroyer([1, 2, 3, 5, 1, 2, 3], 2, 3); 
+	// should return [1, 5, 1].
+
+document.getElementById("demo3").innerHTML = destroyer([2, 3, 2, 3], 2, 3)  
+	//should return [].
+
+document.getElementById("demo4").innerHTML = destroyer(["tree", "hamburger", 53], "tree", 53); 
+	// should return ["hamburger"].
+   
+</script>
+<pre style="background: #efefef; width: 600px; border: 2px solid green; padding: 8px">
+function removeValue(val) {
+	 return (val != this);
+}
+
+function destroyer(arr) {
+  var testArr = arr;
+  var args = Array.from(arguments);
+  for (var i = 1; i < args.length; i++) {
+	testArr = testArr.filter(removeValue, args[i]);
+  
+  }
+  
+  return testArr;
+}
+</pre>
+</body>
+
+
+</html>

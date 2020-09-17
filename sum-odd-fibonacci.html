@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajblk.github.io/SyntaxHighlightGenerator-v3.0/scripts/sh-v3.0-min.js"></script>
+<link type="text/css" rel="stylesheet" href="http://ajblk.github.io/SyntaxHighlightGenerator-v3.0/styles/shCoreDefault.css"/>
+<link  rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body style="background: #a3af62">
+<h3>sum-odd-fibonacci</h3>
+
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<p id="demo5"></p>
+
+<pre class="prettyprint linenums">
+function makeFibArray(numMax){
+	var x = 0; // running total
+    for(var fibArray = [1], i=0,j=1,k=0; x < numMax; i=j,j=x,k++ ){
+        x=i+j;
+        fibArray.push(x);
+    }
+    return fibArray;
+}
+
+function sumFibs(num) {
+
+	var fibArray = makeFibArray(num);
+	var runningTot = 0;
+	for (var i = 0; i < fibArray.length; i++) {
+		if (fibArray[i] <= num) {
+			if (fibArray[i] % 2 === 1) {
+				runningTot += fibArray[i];
+			}			
+		} else {
+		// stop
+			num = runningTot;
+			return num;
+		}
+	}
+
+	
+   return runningTot;
+}
+</pre>
+
+<script>
+
+function makeFibArray(numMax){
+	var x = 0; // running total
+    for(var fibArray = [1], i=0,j=1,k=0; x<numMax;i=j,j=x,k++ ){
+        x=i+j;
+        fibArray.push(x);
+    }
+    return fibArray;
+}
+
+function sumFibs(num) {
+
+	var fibArray = makeFibArray(num);
+	var runningTot = 0;
+	for (var i = 0; i < fibArray.length; i++) {
+		if (fibArray[i] <= num) {
+			if (fibArray[i] % 2 === 1) {
+				runningTot += fibArray[i];
+			}			
+		} else {
+		// stop
+			num = runningTot;
+			return num;
+		}
+	}
+
+	
+   return runningTot;
+}
+
+
+document.getElementById("demo").innerHTML = sumFibs(1000); // should return 1785
+
+document.getElementById("demo2").innerHTML = sumFibs(4000000);  
+	// should return 4613732.
+
+document.getElementById("demo3").innerHTML = sumFibs(4);
+  // should return 5
+
+document.getElementById("demo4").innerHTML = sumFibs(75024); 
+	// should return 60696.
+
+document.getElementById("demo5").innerHTML = sumFibs(75025);
+	//  should return 135721.
+ 
+</script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+</body>
+
+
+</html>

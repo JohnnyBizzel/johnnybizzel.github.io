@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <meta charset="utf-8" />
+    <title>Days left</title>
+    <style type="text/css">
+        h1, h2, div { color: yellow; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif}
+    </style>
+</head>
+<body style="background-color: black">
+    <h2>Days until I leave:</h2>
+    <div id="outputDaysUntil"></div>
+    <h2>Working days left:</h2>
+    <div id="outputDaysWork"></div>
+
+    <script type="text/javascript">
+        var dt = new Date();
+        var dayUntil = dt.getDate();
+        var monthPart = dt.getMonth();
+        var workDays = [22, 21, 20, 19, 18, 15, 14, 13, 12, 11, 8, 7, 6, 5, 4, 1, 31, 30, 29, 24];
+        
+        var nowFinished = function(d) {
+		  	return 2016 >= d.getFullYear()
+    		&& 22 >= d.getDate()
+    		&& 3 >= d.getMonth();
+			}
+
+        $(document).ready(function () {
+            if (nowFinished(dt)) {
+            	$("#outputDaysUntil").text("Zero");
+            	$("#outputDaysWork").text("Zero");
+            } else { 
+            	var actualDays = (31 - dayUntil + 22);
+         	   if (monthPart == 3) { actualDays = 22 - dayUntil };
+           		$("#outputDaysUntil").text("A mere " + actualDays);
+            	var workDaysLeft = workDays.indexOf(dayUntil);
+            	if (workDaysLeft == -1) {
+            		do{ dayUntil --;
+            			 workDaysLeft = workDays.indexOf(dayUntil);
+            		} while (dayUntil > 0 && workDaysLeft == -1)
+            	}
+            	$("#outputDaysWork").text("This many ... " + workDaysLeft);
+            
+            };
+            var workDaysLeft = 0;
+            //while(workDaysLeftworkDays.indexOf(dayUntil);
+        });
+    </script>
+
+</body>
+</html>

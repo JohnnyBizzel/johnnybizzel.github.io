@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link  rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body>
+<h3>Inventory Update</h3>
+Compare and update the inventory stored in a 2D array against a second 2D array of a fresh delivery. 
+Update the current existing inventory item quantities (in arr1). If an item cannot be found, add the new item and quantity into the inventory array. 
+The returned inventory array should be in alphabetical order by item.
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+
+<p id="demo5"></p>
+
+<pre class="prettyprint linenums">
+var combinedAry = [];
+
+function arySort(thisArray) {
+		 // Sort alphabetically, by the product name of each item
+    thisArray.sort(function (a, b) {
+        if (a[1] > b[1]) {
+            return 1;
+        }
+        if (a[1] < b[1]) {
+            return -1;
+        }
+        return 0;
+    });
+	 return thisArray;
+ 
+}
+
+
+function updateInventory(arr1, arr2) {
+ 
+	// Copy the first array onto the final array
+    combinedAry = arr1.slice(0);
+    
+    //  array empty cases
+   if (arr1.length === 0) { 
+
+   	combinedAry = arr2.slice(0); 
+		return arySort(combinedAry);   	
+   }
+  
+	if (arr2.length === 0) { 
+
+   	combinedAry = arr1.slice(0); 
+		return arySort(combinedAry);   	
+   }
+  
+   var foundIn1 = false;
+	var hasBeenAddedFrom2 = false;
+	for (var i = 0; i < arr1.length; i++) {
+
+		var keyVal = [];
+		for (var n = 0; n < arr2.length; n++) {
+			if (arr1[i][1] === arr2[n][1] && !hasBeenAddedFrom2) {
+				// found - do something
+			   keyVal = [(arr1[i][0] + arr2[n][0]), arr1[i][1]];
+				combinedAry.splice(i, 1, keyVal);
+				foundIn1 = true;
+			} else {
+				keyVal = [arr2[n][0], arr2[n][1]];
+				// check if already exists in combined
+				var foundThis = false;
+				for (var c = 0; c < combinedAry.length; c++) {
+					if (combinedAry[c][1].indexOf(keyVal[1]) > -1) {
+						foundThis = true;												
+					}
+				}
+				if (!foundThis) {
+					combinedAry.push(keyVal);
+					foundThis = true;
+				}						
+
+			}
+	
+		}
+	/* Not found in 2nd array so add first array's element as is	*/
+		if (!hasBeenAddedFrom2 && !foundIn1 && keyVal !== undefined) {
+			combinedAry.push(keyVal);	
+			hasBeenAdded = true;		
+		}
+		
+	}
+	  
+	 // Sort alphabetically, by the product name of each item
+    arySort(combinedAry);
+   
+  return combinedAry;
+}
+</pre>
+<script>
+
+var combinedAry = [];
+
+function arySort(thisArray) {
+		 // Sort alphabetically, by the product name of each item
+    thisArray.sort(function (a, b) {
+        if (a[1] > b[1]) {
+            return 1;
+        }
+        if (a[1] < b[1]) {
+            return -1;
+        }
+        return 0;
+    });
+	 return thisArray;
+ 
+}
+
+
+function updateInventory(arr1, arr2) {
+ 
+	// Copy the first array onto the final array
+    combinedAry = arr1.slice(0);
+    
+    //  array empty cases
+   if (arr1.length === 0) { 
+
+   	combinedAry = arr2.slice(0); 
+		return arySort(combinedAry);   	
+   }
+  
+	if (arr2.length === 0) { 
+
+   	combinedAry = arr1.slice(0); 
+		return arySort(combinedAry);   	
+   }
+  
+   var foundIn1 = false;
+	var hasBeenAddedFrom2 = false;
+	for (var i = 0; i < arr1.length; i++) {
+
+		var keyVal = [];
+		for (var n = 0; n < arr2.length; n++) {
+			if (arr1[i][1] === arr2[n][1] && !hasBeenAddedFrom2) {
+				// found - do something
+			   keyVal = [(arr1[i][0] + arr2[n][0]), arr1[i][1]];
+				combinedAry.splice(i, 1, keyVal);
+				foundIn1 = true;
+			} else {
+				keyVal = [arr2[n][0], arr2[n][1]];
+				// check if already exists in combined
+				var foundThis = false;
+				for (var c = 0; c < combinedAry.length; c++) {
+					if (combinedAry[c][1].indexOf(keyVal[1]) > -1) {
+						foundThis = true;												
+					}
+				}
+				if (!foundThis) {
+					combinedAry.push(keyVal);
+					foundThis = true;
+				}						
+
+			}
+	
+		}
+	/* Not found in 2nd array so add first array's element as is	*/
+		if (!hasBeenAddedFrom2 && !foundIn1 && keyVal !== undefined) {
+			combinedAry.push(keyVal);	
+			hasBeenAdded = true;		
+		}
+		
+	}
+	  
+	 // Sort alphabetically, by the product name of each item
+    arySort(combinedAry);
+   
+  return JSON.stringify(combinedAry);
+}
+
+ document.getElementById("demo").innerHTML = updateInventory([[21, "Bowling Ball"], [2, "Dirty Sock"], [1, "Hair Pin"], [5, "Microphone"]], [[2, "Hair Pin"], [3, "Half-Eaten Apple"], [67, "Bowling Ball"], [7, "Toothpaste"]]); 
+// should return [[88, "Bowling Ball"], [2, "Dirty Sock"], [3, "Hair Pin"], [3, "Half-Eaten Apple"], [5, "Microphone"], [7, "Toothpaste"]].
+
+document.getElementById("demo2").innerHTML = updateInventory([[21, "Bowling Ball"], [2, "Dirty Sock"], [1, "Hair Pin"], [5, "Microphone"]], []); 
+// should return [[21, "Bowling Ball"], [2, "Dirty Sock"], [1, "Hair Pin"], [5, "Microphone"]]
+
+document.getElementById("demo3").innerHTML = updateInventory([[21, "Bowling Ball"], [2, "Dirty Sock"], [1, "Hair Pin"], [5, "Microphone"]], []); 
+// should return [[21, "Bowling Ball"], [2, "Dirty Sock"], [1, "Hair Pin"], [5, "Microphone"]].
+
+document.getElementById("demo4").innerHTML = updateInventory([], [[2, "Hair Pin"], [3, "Half-Eaten Apple"], [67, "Bowling Ball"], [7, "Toothpaste"]]); 
+// should return [[67, "Bowling Ball"], [2, "Hair Pin"], [3, "Half-Eaten Apple"], [7, "Toothpaste"]]
+
+document.getElementById("demo5").innerHTML = updateInventory([[0, "Bowling Ball"], [0, "Dirty Sock"], [0, "Hair Pin"], [0, "Microphone"]], [[1, "Hair Pin"], [1, "Half-Eaten Apple"], [1, "Bowling Ball"], [1, "Toothpaste"]]); 
+// should return [[1, "Bowling Ball"], [0, "Dirty Sock"], [1, "Hair Pin"], [1, "Half-Eaten Apple"], [0, "Microphone"], [1, "Toothpaste"]]
+
+ 
+</script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+
+</body>
+
+
+</html>

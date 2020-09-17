@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<link rel="stylesheet" href="styles/jquery-ui.css">
+  <script src="src/jquery.percentageloader-0.2.js"></script>
+
+
+<style type="text/css">
+body {
+   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+}
+
+#player {
+
+	text-align: center;
+
+	margin-left: 20%;
+	margin-right: 20%;
+}
+#topLoader {
+	margin-left: 5%;
+	margin-right: 5%;
+}
+#container {
+ /* todo - get rid of border */
+  padding: 5px;
+  background-clip: content-box; /* support: IE9+ */
+ 
+}
+#sliders {
+   border-radius: 9px;
+	border: 6px solid #DCECF7;
+ 	padding: 5px;
+}
+.row {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.centreContent {
+  margin-left: auto;
+  margin-right: auto;
+  width: 286px;
+
+/*  background: #AFAFAF; */
+  margin-top: 10px;
+}
+.ui-slider-horizontal {
+    height: 13px;
+    width: 250px;
+}
+.ui-slider {
+    height: 16px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.ui-slider-handle {
+	  height: 40px;
+	  width: 5px;
+}
+
+.sliderTimeTxt {
+		border:0;
+		color:#a6531f;
+		font-weight:bold;
+		width:30px;
+		font-size: 1.2em
+}
+/* todo - get rid of border */
+.blur {
+  box-shadow:
+    0 0 0 3px hsl(0, 0%, 90%),
+    0 0 0 6px hsl(0, 0%, 65%);
+}
+.btn {
+  font-size: 0.75em;
+  background-color: rgb(245,245,245);;
+  border: 0.175em solid gainsboro; 
+  text-transform: uppercase;
+  padding: 4px;
+  border-radius: 0.5em;
+  cursor: pointer;
+}
+.justifyBtn {     
+	display: -webkit-flex; /* Safari */
+   -webkit-justify-content: space-around; /* Safari 6.1+ */
+   display: flex;
+   justify-content: space-around;
+}
+.btn:focus {
+    outline: none;
+  }
+
+.btn-green {
+  color: green;
+  border-color: rgb(102,205,0);
+  box-shadow:  0 0 0 0 rgb(102,205,0), inset 0 0 0 0 rgb(102,205,0);
+  transition: box-shadow 200ms ease-in-out, color 200ms ease-in-out; 
+}
+.btn-green:hover {
+    color: rgb(245,245,245);
+    box-shadow: 0 0 10px 0 rgb(102,205,0), inset 0 0 200px 5px rgb(102,205,0);
+}
+.btn-red {
+  color: rgb(220,20,60);
+  border-color: red;
+  box-shadow:  0 0 0 0 rgb(220,20,60), inset 0 0 0 0 rgb(220,20,60);
+  transition: box-shadow 200ms ease-in-out, color 200ms ease-in-out; 
+}
+.btn-red:hover {
+    color: rgb(245,245,245);
+    box-shadow: 0 0 10px 0 rgb(220,20,60), inset 0 0 200px 5px rgb(220,20,60);
+}
+.btn-amber {
+  color: rgb(255,193,37);
+  border-color: rgb(255,193,37);
+ box-shadow:  0 0 0 0 rgb(220,20,60), inset 0 0 0 0 rgb(220,20,60);
+  transition: box-shadow 200ms ease-in-out, color 200ms ease-in-out; 
+}
+.btn-amber:hover {
+    color: rgb(245,245,245);
+    box-shadow: 0 0 10px 0 rgb(238,154,0), inset 0 0 200px 5px rgb(238,154,0);
+}
+#break {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: #E0EFF8;
+	margin-top: 20px;
+	text-align:center;
+	border-radius: 9px;
+	border: 6px solid #AED1E8;
+ 	padding: 4px;
+ 	color: #80B0C9;
+}
+#breakTimeLeft {
+	font-size: 2.0em;
+	font-weight: bold;
+}
+.top-buffer { margin-top:20px; }
+
+</style>
+<meta charset="utf-8" />
+<title>Pomodoro Clock</title>
+ 
+</head>
+<body>
+<div id="container-fluid" class="centreContent">
+	<div class="row">
+	      <div id="topLoader">  
+	      </div>
+	</div>
+	&emsp;<br/>
+	<div class="x">
+	 	<div id="sliders">
+	       <label for="amount">Minutes until the next break:</label>
+			 <input type="text" id="amount" readonly class="sliderTimeTxt" >
+			     <br/>
+	 			<br/>
+	    <div id="slider-range-max"></div>
+			      <br/>
+			 <label for="amountBreak">Length of break time:</label>		 
+			 <input type="text" id="amountBreak" readonly class="sliderTimeTxt">
+			   <br/>
+			   <br/>
+			 <div id="slider"></div>
+			  <!--  time   <p id="timeLeft"></p> -->
+	  	</div>
+	</div>
+	
+	<div id="break">
+		<span class="h2 text-center">Break time</span>
+		<br/>
+		<span id="breakTimeLeft">0:00</span>
+	</div>
+	<div class="justifyBtn top-buffer">
+	
+	      <button id="startTimerBtn" class="btn btn-green">Start Timer</button>
+	     <button id="stopTimer" class="btn btn-red">Stop Timer</button>
+	     <button id="resetTimer" class="btn btn-amber">Reset</button>
+	       
+	</div>
+</div>
+     <script src="src/pomodoro.js">
+      </script>
+</body>
+</html>

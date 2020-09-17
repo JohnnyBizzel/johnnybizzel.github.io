@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link  rel="stylesheet" href="styles/style.css" type="text/css" media="screen" />
+</head>
+
+<body>
+<h3>Where art thou.</h3>
+Looking up objects in a collection of objects.
+<br/>
+<p id="demo"></p>
+
+<p id="demo2"></p>
+
+<p id="demo3"></p>
+
+<p id="demo4"></p>
+<div id="codeSnippet">
+<pre>
+<code>
+function whereAreYou(collection, source) {
+ <span class="comment"> // What's in a name?</span>
+  var sourceKeys = Object.keys(source);
+  var arr = [];
+
+<span class="comment">  // Only change code below this line
+  //Iterate through array of objects and check for the property of source object</span>
+  arr = collection.filter(function(obj){
+    var foundItems = sourceKeys.length;
+    for (var j = 0; j < sourceKeys.length; j++){
+      
+      if (obj.hasOwnProperty(sourceKeys[j]) && obj[sourceKeys[j]] === source[sourceKeys[j]]) {
+         foundItems--;
+      }
+
+    }
+    if (foundItems === 0) { return true; } else { return false ;} 
+    
+  });
+ 
+  return (arr);
+}
+</code>
+</pre>
+
+<script type="text/javascript">
+
+function whereAreYou(collection, source) {
+  // What's in a name?
+  var sourceKeys = Object.keys(source);
+  var arr = [];
+
+  // Only change code below this line
+  //Iterate through array of objects and check for the property of source object
+  arr = collection.filter(function(obj){
+    var foundItems = sourceKeys.length;
+    for (var j = 0; j < sourceKeys.length; j++){
+      
+      if (obj.hasOwnProperty(sourceKeys[j]) && obj[sourceKeys[j]] === source[sourceKeys[j]]) {
+         foundItems--;
+      }
+
+    }
+    if (foundItems === 0) { return true; } else { return false ;} 
+    
+  });
+ 
+  
+  return JSON.stringify(arr);
+}
+
+
+document.getElementById("demo").innerHTML = whereAreYou([{ first: "Romeo", last: "Montague" }, { first: "Mercutio", last: null }, { first: "Tybalt", last: "Capulet" }], { last: "Capulet" });
+    // [{ first: "Tybalt", last: "Capulet" }].
+
+document.getElementById("demo2").innerHTML = whereAreYou([{ "a": 1 }, { "a": 1 }, { "a": 1, "b": 2 }], { "a": 1 }); 
+ 	// should return [{ "a": 1 }, { "a": 1 }, { "a": 1, "b": 2 }].
+
+document.getElementById("demo3").innerHTML = whereAreYou([{ "a": 1, "b": 2 }, { "a": 1 }, { "a": 1, "b": 2, "c": 2 }], { "a": 1, "b": 2 }); 
+	// should return [{ "a": 1, "b": 2 }, { "a": 1, "b": 2, "c": 2 }].
+
+document.getElementById("demo4").innerHTML = whereAreYou([{ "a": 1, "b": 2 }, { "a": 1 }, { "a": 1, "b": 2, "c": 2 }], { "a": 1, "c": 2 }); 
+		// should return [{ "a": 1, "b": 2, "c": 2 }].
+ 
+</script>
+
+</div>
+
+</body>
+
+
+</html>

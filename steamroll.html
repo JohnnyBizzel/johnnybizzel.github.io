@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+</script>
+</head>
+
+<body style="background-color: #e0e0ea">
+<h3>Steamroller</h3>
+Flatten a nested array. You must account for varying levels of nesting.
+
+<pre>steamrollArray([[["a"]], [["b"]]]);</pre>
+<p id="demo"></p>
+
+<pre>steamrollArray([1, [2], [3, [[4]]]]);</pre>
+<p id="demo2"></p>
+
+<pre>steamrollArray([1, [], [3, [[4]]]]);;</pre>
+<p id="demo3"></p>
+
+<pre>steamrollArray([1, {}, [3, [[4]]]]); </pre>
+<p id="demo4"></p>
+
+
+<pre class="prettyprint linenums">
+function checkElement(el) {
+	var temp = [];
+	if (Array.isArray(el)) {
+		if (el.length === 1) {
+			return checkElement(el[0]);	
+		} else {
+			for (var i=0; i < el.length; i++){
+				temp = temp.concat(checkElement(el[i])); 
+			}
+			return temp; 
+		}
+			
+	} else {
+		return (el);	
+	}	
+}
+
+function steamrollArray(arr) {
+ 
+  return checkElement(arr);
+  
+}
+</pre>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+<script>
+
+function checkElement(el) {
+	var temp = [];
+	if (Array.isArray(el)) {
+		if (el.length === 1) {
+			return checkElement(el[0]);	
+		} else {
+			for (var i=0; i < el.length; i++){
+				temp = temp.concat(checkElement(el[i])); 
+			}
+			return temp; 
+		}
+			
+	} else {
+		return (el);	
+	}	
+}
+
+function steamrollArray(arr) {
+ 
+  return JSON.stringify(checkElement(arr));
+  
+}
+
+ 
+
+document.getElementById("demo").innerHTML = steamrollArray([[["a"]], [["b"]]]);
+											//  should return ["a", "b"].
+
+document.getElementById("demo2").innerHTML = steamrollArray([1, [2], [3, [[4]]]]); 
+											// should return [1, 2, 3, 4]
+						
+
+document.getElementById("demo3").innerHTML = steamrollArray([1, [], [3, [[4]]]]); 
+											// should return [1, 3, 4]
+		
+document.getElementById("demo4").innerHTML = steamrollArray([1, {}, [3, [[4]]]]); 
+											// should return [1, {}, 3, 4].
+
+// document.getElementById("demo5").innerHTML = 
+								
+</script>
+
+</body>
+
+
+</html>

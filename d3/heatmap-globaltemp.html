@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+  <meta charset="UTF-8">
+<!--  <link rel="shortcut icon" type="image/x-icon" href="https://production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />-->
+  <link rel="mask-icon" type="" href="https://production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" />
+  <title>D3 Heat Map - Global land surface temperatures</title>
+ <style>
+ body {
+   background-image: url("https://c2.staticflickr.com/6/5557/14209199242_e889d1822e_h.jpg"); 
+   background-size: cover;
+   background-repeat: no-repeat;
+  font-weight: bold;
+}
+#header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items:center;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+#header img {
+  box-shadow: 2px 2px 10px #1252a2;
+}
+
+#graph{
+  margin-left: auto;
+  margin-right: auto;
+  width: 1024px;
+  height:800px;
+  opacity: 0.9;
+  font-weight: bold;
+}
+footer {
+  margin: 20px;
+  text-align: center;
+  font-size: 0.7em;
+}
+
+.chart {
+  background-color: #fff;
+  border: 0px solid black;
+}
+.axis text {
+  font: 10px sans-serif;
+}
+a {
+	color: skyblue;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 140px;
+  height: auto;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: LimeGreen;
+  border: 0px;
+  border-radius: 6px;
+  pointer-events: none;
+}
+.monthLbl {
+	font-size: 0.8em;
+}
+  </style>
+
+</head>
+
+<body translate="no" >
+
+  <div id="header">
+  
+  <h2>&emsp;Monthly Global Land Surface Temperature&emsp;</h2>
+  <br/> 
+</div>
+ <div id="graph">
+    <svg class="chart"></svg>
+	<svg class="keychart"></svg>
+  </div>
+<footer>
+  Photo credit <a href="https://www.flickr.com/photos/johnseb/">JohnSeb</a>
+</footer>
+  
+  <script src='https://d3js.org/d3.v4.js'></script>
+
+ <script>
+  d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/global-temperature.json", 
+  	function(dataset) {
+  	let xYears = []
+  	dataset.monthlyVariance.forEach(y => {
+  		if (!xYears.includes(y.year)) 
+  			xYears.push(y.year);
+  	});
+  	console.log(xYears)
+  
+  // Colour codes colder than base
+  	const coldColors = ['#dee2ed', '#afb8d3', '#7f8db8', '#6778aa', '#4f639d']
+  	// Colour codes hotter that base
+	const hotColors = ['#ffedba','#ffde7d','#ffb853', '#fa7433', '#eb4e33']
+
+	const monthText = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov', 'Dec']
+	const baseTemp = dataset.baseTemperature;  
+	const totalWidth = 1000, totalHeight = 640;
+	
+	 const margin = {
+	   top: 30,
+	   right: 30,
+	   bottom: 80,
+	   left: 100
+	 },chartWidth = totalWidth - margin.left - margin.right,
+	 chartHeight = totalHeight - margin.top - margin.bottom;
+	
+  const yAxisScale = d3.scaleLinear()
+	 .range([25, chartHeight])
+	 .domain([0,12]);
+
+	 //.domain([new Date(2012, 0, 1), new Date(2012, 11, 31)]);
+
+
+  const yAxis = d3.axisLeft()
+	 .scale(yAxisScale);
+	 //.tickSize(10, 0);
+	 //.tickFormat(d3.timeFormat("%B"));
+
+
+  const labelValues = xYears.map(y => y); 
+
+  
+  const xAxisScale = d3.scaleLinear()
+	.domain([xYears[0],xYears[xYears.length-1]])
+   .range([0, chartWidth-30]);
+     
+  const xAxis = d3.axisBottom(xAxisScale)
+    .ticks(32)
+    .tickFormat(d3.format("")); // remove any special number formats
+  
+
+  const div = d3.select("#graph").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+  
+  const chart = d3.select(".chart")
+    .attr("width", totalWidth)
+    .attr("height", totalHeight)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  const monthLabels = chart.selectAll(".monthLabel")
+    .data(monthText)
+    .enter()
+    .append("text")
+    .text(function(d) {
+      return d;
+    })
+    .attr("x", 0)
+    .attr("y", function(d, i) {
+      return i * 42;
+    })
+    .style("text-anchor", "end")
+    .attr("transform", "translate(-6," + 50 + ")")
+    .attr("class", "monthLbl");
+
+
+  const yearExtent = d3.extent(dataset, (d) => d.year);
+  const monthExtent = d3.extent(dataset, (d) => d.month);
+
+  const yearScale = d3.scaleTime()
+    .domain([new Date(yearExtent[0], 0), new Date(yearExtent[1], 0)])
+    .range([margin.left * 1.8, chartWidth - margin.right]);
+    
+  const monthScale = d3.scaleTime()
+    .domain([new Date(2015, monthExtent[1] - 1), new Date(2015, monthExtent[0] - 1)])
+    .range([chartHeight - margin.top * 2, margin.bottom - 20]);    
+
+	function varianceColour(d) {
+		if (d.variance >= 0) {
+			if (d.variance > 4) return hotColors[4];
+			if (d.variance > 3) return hotColors[3];
+			if (d.variance > 2) return hotColors[2];
+			if (d.variance > 1) return hotColors[1];
+			if (d.variance >= 0) return hotColors[0];
+		} else {
+			if (d.variance < -4) return coldColors[4];
+			if (d.variance < -3) return coldColors[3];
+			if (d.variance < -2) return coldColors[2];
+			if (d.variance < -1) return coldColors[1];
+			if (d.variance < 0) return coldColors[0];
+		}
+		return '#fff';  
+	}
+
+
+
+  // Bind data
+
+  const blocks = chart.selectAll('rect')
+    .data(dataset.monthlyVariance)
+    .enter()
+    .append('rect')
+    .attr('width', Math.ceil(chartWidth / 263))
+    .attr('height', (chartHeight - (margin.top - 15) * 1.8)/12)
+    .attr('x', (d) => xAxisScale(d.year))
+    .attr('y', (d) => yAxisScale(d.month - 1))
+    .attr('fill', (d) => varianceColour(d))
+	 .on("mouseover", function(d) {
+       div.transition()
+         .duration(100)
+         .style("opacity", 1.0);
+       var htmlCode = d.year + '-' + monthText[d.month-1] + '<br/>' +
+          'Variance: ' + (d.variance) + '&deg; C<br/>' +
+          'Ave Temp: ' + (baseTemp + Number(d.variance)).toFixed(2) + '&deg; C' ;
+       div.html(htmlCode)
+         .style("left", (d3.event.pageX) + "px")
+         .style("top", (d3.event.pageY - 28) + "px");
+       })
+    .on("mouseout", function(d) {
+       div.transition()
+         .duration(200)
+         .style("opacity", 0);
+       });
+
+  chart.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + chartHeight + ")")
+    .call(xAxis);
+
+  chart.append("g")
+    .call(yAxis)
+    .attr("opacity", "0"); // hide the ticks so only shows the months
+
+  // X-axis label
+  chart.append("text")
+    .attr("x", totalWidth - margin.right - 220)
+    .attr("y", totalHeight - margin.bottom)
+    .attr("dy", "1.2em")
+    .style("font-size", "14px")
+    .text("Year");
+
+  // Y-axis label
+  chart.append("text")
+    .attr("x", -90)
+    .attr("y", -90)
+    .attr("dy", "1.2em")
+    .attr('transform', 'rotate(-90)')
+    .style("font-size", "14px")
+    .text("Month");
+
+  // Key
+  chart.append("text")
+    .attr("x", 40)
+    .attr("y", chartHeight + 20)
+    .attr("dy", "1.2em")
+    .style("font-size", "12px")
+    .text("Temperature variance - degrees above or below average temp 8.54°C");
+ 
+ 	const allColors = coldColors.reverse().concat(hotColors);
+ 	
+ const keys = chart.selectAll("circle")
+    .data(allColors)
+    .enter()
+    .append("circle")
+    .attr('r', 15)
+    .attr('cx', (d,i) => (i * 40) + margin.left)
+    .attr('cy', totalHeight - 50)
+    .style('fill', (d,i) => allColors[i]);
+    
+    
+//const testSet = [{"temp":-4},{"temp":-3},{"temp":-2},{"temp":-1},{"temp":0}];
+//console.log(testSet);
+//
+//var keyLabels = chart.selectAll("text")
+//	 .data(testSet)
+//    .enter()
+//    .append('g')
+//    .append("text")
+//    .text('3')
+//    .attr("x", (d,i) => i * 40)
+//    .attr("y", "50%")
+//    .attr("dy", ".3em");
+   
+   chart.append('text')
+   .text('-4°')
+   .attr("x", -50 + margin.left)
+    .attr("y", totalHeight - 50)
+    .attr("dy", ".3em")
+
+   chart.append('text')
+   .text('+4°')
+   .attr("x", 380  + margin.left)
+    .attr("y", totalHeight - 50)
+    .attr("dy", ".3em")
+        
+  
+})
+    </script>
+
+</body>
+
+</html>
+ 
