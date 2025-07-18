@@ -199,7 +199,7 @@ function getWeatherReport (startingLat, startingLong) {
 			    															json.Locations.Location[i].id)
 			    	}
 			    	/*$('#local').html("ID nearest: "+ idOfNearestStation + '<br/>');*/
-			    	$.getJSON("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + idOfNearestStation + '?res=3hourly&key=3b40dfa1-885a-467d-bd87-609f1afa4c15', function (weatherJson) {
+			    	$.getJSON("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + idOfNearestStation + '?res=3hourly&key=needs-renewing', function (weatherJson) {
 			    		$('#local').text('');
 			    		var wthStn = weatherJson.SiteRep.DV.Location;
 			    		$('#place').val(wthStn.name);
